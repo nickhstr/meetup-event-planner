@@ -1,0 +1,115 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="meetup-section.html">
+
+<dom-module id="meetup-signin">
+	<template>
+		<style is="custom-style">
+			:host {
+				background-color: var(--light-gray);
+			}
+
+			meetup-section {
+				margin: 0 80px;
+			}
+
+			section {
+				padding: 40px 20px;
+			}
+
+			[dead-center] {
+				@apply(--layout);
+				@apply(--layout-center-center);
+			}
+
+			[center-vertical] {
+				@apply(--layout);
+				@apply(--layout-center);
+			}
+
+			section[center-vertical] {
+				background-color: var(--dark-gray);
+				color: #fff;
+			}
+
+			section.submit {
+				padding: 0;
+			}
+
+			h1.underline {
+				font-family: 'Slabo 13px', serif;
+				font-size: 1.75em;
+				padding: 0 0 5px 0;
+				border-bottom: 1px solid var(--primary-color);
+				width: 8em;
+				margin: 0 0 0 60px;
+			}
+
+			paper-input {
+				width: 400px;
+				margin: 10px 20px;
+			}
+
+			paper-button {
+				margin: 0 80px;
+				background-color: var(--secondary-color);
+				color: #fff;
+			}
+
+
+			@media (max-width: 739px) {
+				paper-input {
+					width: 75vw;
+				}
+
+				h1.underline {
+					margin: 0 0 0 20px;
+				}
+			}
+		</style>
+
+		<section center-vertical>
+			<h1 class="underline">Sign In</h1>
+		</section>
+		
+		<section dead-center>
+			<meetup-section>
+				<paper-input autofocus autocomplete="email" label="Email" type="email" value="{{email}}"></paper-input>
+				<paper-input autocomplete="password" label="Password" type="password" value="{{password}}"></paper-input>
+			</meetup-section>
+		</section>
+
+		<section class="submit" dead-center>
+			<paper-button raised on-tap="signIn">Sign In</paper-button>
+		</section>
+
+	</template>
+	<script>
+		
+	Polymer({
+
+		is: 'meetup-signin',
+
+		properties: {
+			email: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			password: {
+				type: String,
+				value: '',
+				notify: true
+			}
+		},
+
+		signIn: function(e, detail) {
+			this.fire('sign-in', {email: this.email, password: this.password}, {bubbles: false});
+		}
+
+	});
+
+	</script>
+</dom-module>
