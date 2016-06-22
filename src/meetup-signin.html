@@ -9,6 +9,8 @@
 		<style is="custom-style">
 			:host {
 				background-color: var(--light-gray);
+				--paper-input-container-focus-color: var(--secondary-color);
+				--paper-input-container-invalid-color: var(--primary-color);
 			}
 
 			meetup-section {
@@ -58,6 +60,12 @@
 				color: #fff;
 			}
 
+			.box {
+				width: 50px;
+				height: 50px;
+				background-color: red;
+			}
+
 
 			@media (max-width: 739px) {
 				paper-input {
@@ -76,13 +84,35 @@
 		
 		<section dead-center>
 			<meetup-section>
-				<paper-input id="signinfirst" autocomplete="email" label="Email" type="email" value="{{email}}"></paper-input>
-				<paper-input autocomplete="password" label="Password" type="password" value="{{password}}"></paper-input>
+				<paper-input
+					id="signinfocus"
+					autofocus
+					autocomplete="email"
+					auto-validate
+					error-message="Don't forget your email!"
+					label="Email"
+					type="email"
+					value="{{email}}"
+					required>
+				</paper-input>
+				<paper-input
+					autocomplete="password"
+					auto-validate
+					error-message="Don't forget your password!"
+					label="Password"
+					type="password"
+					value="{{password}}"
+					required>
+				</paper-input>
 			</meetup-section>
 		</section>
 
 		<section class="submit" dead-center>
-			<paper-button raised on-tap="signIn">Sign In</paper-button>
+			<paper-button raised on-tap="signIn" type="submit">Sign In</paper-button>
+		</section>
+
+		<section dead-center>
+			<div hidden$="{{!signInError}}">Whoops! Your username or password is not quite right.</div>
 		</section>
 
 	</template>
@@ -108,6 +138,11 @@
 				value: '',
 				notify: true,
 				reflectToAttribute: true
+			},
+			signInError: {
+				type: Boolean,
+				value: false,
+				notify: true
 			}
 		},
 
@@ -121,7 +156,7 @@
 
 		compareRoute: function(page) {
 			if (page === 'signin') {
-				this.$.signinfirst.focus();
+				this.$.signinfocus.focus();
 			}
 		}
 

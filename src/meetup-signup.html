@@ -9,6 +9,8 @@
 		<style is="custom-style">
 			:host {
 				background-color: var(--light-gray);
+				--paper-input-container-focus-color: var(--secondary-color);
+				--paper-input-container-invalid-color: var(--primary-color);
 			}
 
 			meetup-section {
@@ -76,10 +78,43 @@
 		
 		<section dead-center>
 			<meetup-section>
-				<paper-input id="signupfirst" autocomplete="name" label="First Name" value="{{firstname}}"></paper-input>
-				<paper-input autocomplete="name" label="Last Name" value="{{lastname}}"></paper-input>
-				<paper-input autocomplete="email" label="Email" type="email" value="{{email}}"></paper-input>
-				<paper-input autocomplete="password" label="Password" type="password" value="{{password}}"></paper-input>
+				<paper-input
+					id="signupfocus"
+					autofocus autocomplete="given-name"
+					label="First Name" value="{{firstname}}"
+					required
+					auto-validate
+					error-message="Requires text only!"
+					pattern="[a-zA-Z]+">
+				</paper-input>
+				<paper-input
+					autocomplete="family-name"
+					label="Last Name"
+					value="{{lastname}}"
+					required
+					auto-validate
+					error-message="Requires text only!"
+					pattern="[a-zA-Z]+">
+				</paper-input>
+				<paper-input
+					autocomplete="email"
+					label="Email"
+					type="email"
+					value="{{email}}"
+					required
+					auto-validate
+					error-message="Please enter an email address!">
+				</paper-input>
+				<paper-input
+					autocomplete="password"
+					label="Password"
+					type="password"
+					value="{{password}}"
+					required
+					auto-validate
+					error-message="Must contain letters and numbers, and be at least 8 characters long"
+					pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+				</paper-input>
 			</meetup-section>
 		</section>
 
@@ -133,7 +168,7 @@
 
 		compareRoute: function(page) {
 			if (page === 'signup') {
-				this.$.signupfirst.focus();
+				this.$.signupfocus.focus();
 			}
 		}
 

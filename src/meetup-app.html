@@ -160,8 +160,8 @@
         <neon-animated-pages selected="[[page]]" attr-for-selected="name" entry-animation="scale-up-animation" exit-animation="slide-down-animation">
           <meetup-home name="home"></meetup-home>
           <meetup-events name="events"></meetup-events>
-          <meetup-signin name="signin" on-sign-in="signIn" page=[[routeData.page]]></meetup-signin>
-          <meetup-signup name="signup" on-sign-up="signUp" page=[[routeData.page]]></meetup-signup>
+          <meetup-signin id="signinPage" name="signin" on-sign-in="signIn" page="[[page]]"></meetup-signin>
+          <meetup-signup name="signup" on-sign-up="signUp" page="[[page]]"></meetup-signup>
         </neon-animated-pages>
       
       </app-header-layout>
@@ -222,16 +222,31 @@
       },
 
       signUp: function(e) {
-        console.log(e.detail);
+        var self = this;
+        this.$.auth.createUserWithEmailAndPassword(e.detail.email, e.detail.password).then(function(data) {
+          self.set('routeData.page', 'events');
+        });
       },
 
       signIn: function(e) {
-        console.log(e.detail);
+        var self = this;
+        this.$.auth.signInWithEmailAndPassword(e.detail.email, e.detail.password).then(function(data) {
+          if (data) {
+            self.$.signinPage.signInError = false;
+            self.set('routeData.page', 'events');
+          }
+          else {
+            self.$.signinPage.signInError = true;
+          }
+        });
       },
 
-      signOut: function() {
+      logout: function() {
+        var self = this;
         if (this.$.auth) {
-          this.$.auth.signOut();
+          this.$.auth.signOut().then(function(data) {
+            self.set('routeData.page', 'signin');
+          });
         }
       }
     });
