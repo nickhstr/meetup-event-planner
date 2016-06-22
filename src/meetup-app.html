@@ -160,7 +160,7 @@
         <neon-animated-pages selected="[[page]]" attr-for-selected="name" entry-animation="scale-up-animation" exit-animation="slide-down-animation">
           <meetup-home name="home"></meetup-home>
           <meetup-events name="events"></meetup-events>
-          <meetup-signin name="signin" on-sign-in="signIn"></meetup-signin>
+          <meetup-signin name="signin" on-sign-in="signIn" page=[[routeData.page]]></meetup-signin>
           <meetup-signup name="signup" on-sign-up="signUp" page=[[routeData.page]]></meetup-signup>
         </neon-animated-pages>
       

@@ -76,7 +76,7 @@
 		
 		<section dead-center>
 			<meetup-section>
-				<paper-input autofocus autocomplete="email" label="Email" type="email" value="{{email}}"></paper-input>
+				<paper-input id="signinfirst" autocomplete="email" label="Email" type="email" value="{{email}}"></paper-input>
 				<paper-input autocomplete="password" label="Password" type="password" value="{{password}}"></paper-input>
 			</meetup-section>
 		</section>
@@ -102,11 +102,27 @@
 				type: String,
 				value: '',
 				notify: true
+			},
+			page: {
+				type: String,
+				value: '',
+				notify: true,
+				reflectToAttribute: true
 			}
 		},
 
+		observers: [
+			'compareRoute(page)'
+		],
+
 		signIn: function(e, detail) {
 			this.fire('sign-in', {email: this.email, password: this.password}, {bubbles: false});
+		},
+
+		compareRoute: function(page) {
+			if (page === 'signin') {
+				this.$.signinfirst.focus();
+			}
 		}
 
 	});
