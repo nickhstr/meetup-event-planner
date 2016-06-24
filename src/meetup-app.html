@@ -47,6 +47,10 @@
         justify-content: space-between;
       }
 
+      .drawer-header {
+        background-color: var(--dark-gray);
+      }
+
       .content {
         font-size: 3em;
       }
@@ -117,27 +121,34 @@
       user="{{user}}">
     </firebase-auth>
 
+    <firebase-document
+      id="userStuff"
+      app-name="meetup"
+      path="/users/[[user.uid]]/info"
+      data="{{userInfo}}">
+    </firebase-document>
+
     <app-drawer-layout fullbleed force-narrow>
       
       <app-drawer id="drawer">
-        <app-toolbar class="header-theme"></app-toolbar>
-          <paper-menu selected="[[page]]" attr-for-selected="name">
-            <paper-item name="events">
-              <a class="item" href="/events/">Events</a>
-            </paper-item>
-            <paper-item name="signin" hidden$="[[signedIn]]">
-              <a class="item" href="/signin/">Sign In</a>
-            </paper-item>
-            <paper-item name="signup" hidden$="[[signedIn]]">
-              <a class="item" href="/signup/">Sign Up</a>
-            </paper-item>
-            <paper-item name="user" hidden$="[[!signedIn]]">
-              <a class="item" href="/user/">Me</a>
-            </paper-item>
-            <paper-item name="logout" hidden$="[[!signedIn]]">
-              <a class="item" on-tap="logout">Logout</a>
-            </paper-item>
-          </paper-menu>
+        <app-toolbar class="drawer-header"></app-toolbar>
+        <paper-menu selected="[[page]]" attr-for-selected="name">
+          <paper-item name="events">
+            <a class="item" href="/events/">Events</a>
+          </paper-item>
+          <paper-item name="signin" hidden$="[[signedIn]]">
+            <a class="item" href="/signin/">Sign In</a>
+          </paper-item>
+          <paper-item name="signup" hidden$="[[signedIn]]">
+            <a class="item" href="/signup/">Sign Up</a>
+          </paper-item>
+          <paper-item name="user" hidden$="[[!signedIn]]">
+            <a class="item" href="/user/">Me</a>
+          </paper-item>
+          <paper-item name="logout" hidden$="[[!signedIn]]">
+            <a class="item" on-tap="logout">Logout</a>
+          </paper-item>
+        </paper-menu>
       </app-drawer>
       
       <app-header-layout>
@@ -162,6 +173,7 @@
           <meetup-events name="events"></meetup-events>
           <meetup-signin id="signinPage" name="signin" on-sign-in="signIn" page="[[page]]"></meetup-signin>
           <meetup-signup name="signup" on-sign-up="signUp" page="[[page]]"></meetup-signup>
+          <meetup-user name="user" on-log-user="logUser" on-add-info="addInfo"></meetup-user>
         </neon-animated-pages>
       
       </app-header-layout>
@@ -193,12 +205,26 @@
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+        userFirstName: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        userLastName: {
+          type: String,
+          value: '',
+          notify: true
         }
       },
 
       observers: [
         '_routePathChanged(routeData.page)'
       ],
+
+      listners: {
+        'add-to-user': 'addToUser'
+      },
 
       _routePathChanged: function(page) {
           this.page = page || 'home';
@@ -223,9 +249,24 @@
 
       signUp: function(e) {
         var self = this;
-        this.$.auth.createUserWithEmailAndPassword(e.detail.email, e.detail.password).then(function(data) {
-          self.set('routeData.page', 'events');
-        });
+        this.$.auth.createUserWithEmailAndPassword(e.detail.email, e.detail.password)
+          .then(function(data) {
+            self.set('routeData.page', 'user');
+            self.userFirstName = e.detail.firstname;
+            self.userLastName = e.detail.lastname;
+            return data;
+          })
+          .then(function(data) {
+            setTimeout(function() {
+              self.userInfo = {
+                firstname: self.userFirstName,
+                lastname: self.userLastName
+              };
+              return self.$.userStuff.setStoredValue(self.$.userStuff.path, self.userInfo).then(function(data) {
+                console.log(self.userInfo);
+              });
+            }, 1000);
+          });
       },
 
       signIn: function(e) {
@@ -248,6 +289,15 @@
             self.set('routeData.page', 'signin');
           });
         }
+      },
+
+      logUser: function() {
+        console.log(this.userInfo);
+      },
+
+      addInfo: function() {
+        this.userInfo.testing = 'attention please';
+        return this.$.userStuff.setStoredValue(this.$.userStuff.path, this.userInfo);
       }
     });
 

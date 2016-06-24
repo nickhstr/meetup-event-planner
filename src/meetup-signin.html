@@ -2,7 +2,9 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="meetup-section.html">
+<link rel="import" href="meetup-title.html">
 
 <dom-module id="meetup-signin">
 	<template>
@@ -23,30 +25,29 @@
 
 			[dead-center] {
 				@apply(--layout);
+				@appply(--layout-wrap);
 				@apply(--layout-center-center);
-			}
-
-			[center-vertical] {
-				@apply(--layout);
-				@apply(--layout-center);
-			}
-
-			section[center-vertical] {
-				background-color: var(--dark-gray);
-				color: #fff;
 			}
 
 			section.submit {
 				padding: 0;
 			}
 
-			h1.underline {
-				font-family: 'Slabo 13px', serif;
-				font-size: 1.75em;
-				padding: 0 0 5px 0;
-				border-bottom: 1px solid var(--primary-color);
-				width: 8em;
-				margin: 0 0 0 60px;
+			section.error-message {
+				
+			}
+
+			h2.error {
+				color: black;
+				font-weight: lighter;
+				margin: 0 10px;
+			}
+
+			#iconError {
+				color: var(--primary-color);
+				width: 30px;
+				height: 30px;
+				display: block;
 			}
 
 			paper-input {
@@ -71,16 +72,10 @@
 				paper-input {
 					width: 75vw;
 				}
-
-				h1.underline {
-					margin: 0 0 0 20px;
-				}
 			}
 		</style>
 
-		<section center-vertical>
-			<h1 class="underline">Sign In</h1>
-		</section>
+		<meetup-title title="Sign In"></meetup-title>
 		
 		<section dead-center>
 			<meetup-section>
@@ -111,8 +106,11 @@
 			<paper-button raised on-tap="signIn" type="submit">Sign In</paper-button>
 		</section>
 
-		<section dead-center>
-			<div hidden$="{{!signInError}}">Whoops! Your username or password is not quite right.</div>
+		<section class="error-message" dead-center hidden$="{{!signInError}}">
+			<div>
+				<iron-icon id="iconError" icon="error"></iron-icon>
+			</div>
+			<h2 class="error">Whoops! Your username or password is not quite right.</h2>
 		</section>
 
 	</template>

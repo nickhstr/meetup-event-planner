@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="meetup-section.html">
+<link rel="import" href="meetup-title.html">
 
 <dom-module id="meetup-signup">
 	<template>
@@ -26,27 +27,8 @@
 				@apply(--layout-center-center);
 			}
 
-			[center-vertical] {
-				@apply(--layout);
-				@apply(--layout-center);
-			}
-
-			section[center-vertical] {
-				background-color: var(--dark-gray);
-				color: #fff;
-			}
-
 			section.submit {
 				padding: 0;
-			}
-
-			h1.underline {
-				font-family: 'Slabo 13px', serif;
-				font-size: 1.75em;
-				padding: 0 0 5px 0;
-				border-bottom: 1px solid var(--primary-color);
-				width: 8em;
-				margin: 0 0 0 60px;
 			}
 
 			paper-input {
@@ -65,16 +47,10 @@
 				paper-input {
 					width: 75vw;
 				}
-
-				h1.underline {
-					margin: 0 0 0 20px;
-				}
 			}
 		</style>
 
-		<section center-vertical>
-			<h1 class="underline">Sign Up</h1>
-		</section>
+		<meetup-title title="Sign Up"></meetup-title>
 		
 		<section dead-center>
 			<meetup-section>

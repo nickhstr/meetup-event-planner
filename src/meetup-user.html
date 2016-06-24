@@ -1,0 +1,28 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="meetup-user">
+	<template>
+		<style>
+			
+		</style>
+		<button on-tap="addHandler">Add</button>
+		<button on-tap="logHandler">Log</button>
+	</template>
+	<script>
+		
+	Polymer({
+
+		is: 'meetup-user',
+
+		logHandler: function(e, detail) {
+			this.fire('log-user');
+		},
+
+		addHandler: function(e, detail) {
+			this.fire('add-info');
+		}
+
+	})
+
+	</script>
+</dom-module>

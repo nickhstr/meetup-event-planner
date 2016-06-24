@@ -14,8 +14,9 @@
     "iron-pages": "PolymerElements/iron-pages#^1.0.7",
     "neon-animation": "PolymerElements/neon-animation#^1.2.3",
     "iron-image": "PolymerElements/iron-image#^1.2.3",
-    "polymerfire": "firebase/polymerfire#^0.9.2",
-    "paper-input": "PolymerElements/paper-input#^1.1.11"
+    "paper-input": "PolymerElements/paper-input#^1.1.11",
+    "paper-date-picker": "polymer-paper-date-picker#^1.1.4",
+    "polymerfire": "firebase/polymerfire#^0.9.3"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
