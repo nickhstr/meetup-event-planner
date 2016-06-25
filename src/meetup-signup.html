@@ -61,7 +61,8 @@
 					required
 					auto-validate
 					error-message="Requires text only!"
-					pattern="[a-zA-Z]+">
+					pattern="[a-zA-Z]+"
+					invalid="{{signupFirst}}">
 				</paper-input>
 				<paper-input
 					autocomplete="family-name"
@@ -70,7 +71,8 @@
 					required
 					auto-validate
 					error-message="Requires text only!"
-					pattern="[a-zA-Z]+">
+					pattern="[a-zA-Z]+"
+					invalid="{{signupLast}}">
 				</paper-input>
 				<paper-input
 					autocomplete="email"
@@ -79,7 +81,8 @@
 					value="{{email}}"
 					required
 					auto-validate
-					error-message="Please enter an email address!">
+					error-message="Please enter an email address!"
+					invalid="{{signupEmail}}">
 				</paper-input>
 				<paper-input
 					autocomplete="password"
@@ -89,13 +92,14 @@
 					required
 					auto-validate
 					error-message="Must contain letters and numbers, and be at least 8 characters long"
-					pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+					pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+					invalid="{{signupPass}}">
 				</paper-input>
 			</meetup-section>
 		</section>
 
 		<section class="submit" dead-center>
-			<paper-button raised on-tap="signUp">Sign Up</paper-button>
+			<paper-button raised on-tap="signUp" disabled="[[!formValid]]">Sign Up</paper-button>
 		</section>
 
 	</template>
@@ -131,11 +135,40 @@
 				value: '',
 				notify: true,
 				reflectToAttribute: true
+			},
+			signupFirst: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			signupLast: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			signupEmail: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			signupPass: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			formValid: {
+				type: Boolean,
+				notify: true
 			}
 		},
 
+		ready: function() {
+			this.formValid = false;
+		},
+
 		observers: [
-			'compareRoute(page)'
+			'compareRoute(page)',
+			'validityCheck(signupFirst, signupLast, signupEmail, signupPass)'
 		],
 
 		signUp: function(e, detail) {
@@ -145,6 +178,19 @@
 		compareRoute: function(page) {
 			if (page === 'signup') {
 				this.$.signupfocus.focus();
+			}
+		},
+
+		validityCheck: function(signupFirst, signupLast, signupEmail, signupPass) {
+			console.log('first: ' + signupFirst);
+			console.log('last: ' + signupLast);
+			console.log('email: ' + signupEmail);
+			console.log('pass: ' + signupPass);
+			if (signupFirst === false && signupLast === false && signupEmail === false && signupPass === false) {
+				this.formValid = true;
+			}
+			else {
+				this.formValid = false;
 			}
 		}
 
