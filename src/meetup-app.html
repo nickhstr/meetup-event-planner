@@ -20,6 +20,7 @@
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-down-animation.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="meetup-home.html">
 
 <dom-module id="meetup-app">
 
@@ -190,12 +191,10 @@
       is: 'meetup-app',
 
       properties: {
-
         title: {
           type: String,
           value: 'Let\'s Meetup!'
         },
-
         wideLayout: {
           type: Boolean,
           value: false,
@@ -284,9 +283,9 @@
           if (data) {
             self.$.signinPage.signInError = false;
           }
-          else {
-            self.$.signinPage.signInError = true;
-          }
+        }, function(error) {
+          self.$.signinPage.signInError = true;
+          self.$.signinPage.errorMessage = error.message || 'Invalid email or password.';
         });
       },
 
