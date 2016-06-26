@@ -77,40 +77,42 @@
 
 		<meetup-title title="Sign In"></meetup-title>
 		
-		<section dead-center>
-			<meetup-section>
-				<paper-input
-					id="signinfocus"
-					autofocus
-					autocomplete="email"
-					auto-validate
-					error-message="Don't forget your email!"
-					label="Email"
-					type="email"
-					value="{{email}}"
-					required>
-				</paper-input>
-				<paper-input
-					autocomplete="password"
-					auto-validate
-					error-message="Don't forget your password!"
-					label="Password"
-					type="password"
-					value="{{password}}"
-					required>
-				</paper-input>
-			</meetup-section>
-		</section>
+		<form>
+			<section dead-center>
+				<meetup-section>
+					<paper-input
+						id="signinfocus"
+						autofocus
+						autocomplete="email"
+						auto-validate
+						error-message="Don't forget your email!"
+						label="Email"
+						type="email"
+						value="{{email}}"
+						required>
+					</paper-input>
+					<paper-input
+						autocomplete="password"
+						auto-validate
+						error-message="Don't forget your password!"
+						label="Password"
+						type="password"
+						value="{{password}}"
+						required>
+					</paper-input>
+				</meetup-section>
+			</section>
 
-		<section class="submit" dead-center>
-			<paper-button raised on-tap="signIn" type="submit">Sign In</paper-button>
-		</section>
+			<section class="submit" dead-center>
+				<paper-button raised on-tap="signIn" aria-label="Sign In" type="submit">Sign In</paper-button>
+			</section>
+		</form>
 
 		<section class="error-message" dead-center hidden$="{{!signInError}}">
 			<div>
 				<iron-icon id="iconError" icon="error"></iron-icon>
 			</div>
-			<h2 class="error">Whoops! Your username or password is not quite right.</h2>
+			<h2 class="error">Whoops! [[errorMessage]]</h2>
 		</section>
 
 	</template>
@@ -140,6 +142,10 @@
 			signInError: {
 				type: Boolean,
 				value: false,
+				notify: true
+			},
+			errorMessage: {
+				type: String,
 				notify: true
 			}
 		},
