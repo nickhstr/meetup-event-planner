@@ -1,18 +1,72 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
 
 <dom-module id="meetup-event">
 	<template>
 		<style>
-			
+			:host {
+				margin: 20px;
+			}
+
+			paper-card {
+				width: 400px;
+				--paper-card-header-color: #fff;
+			}
 		</style>
 
-		
+		<paper-card heading="[[eventName]]" image="[[eventImage]]">
+			<div>[[eventType]]</div>
+			<div>[[eventHost]]</div>
+			<div>[[eventLocation]]</div>
+			<div>[[eventExtraInfo]]</div>
+		</paper-card>
 	</template>
 	<script>
 		
 	Polymer({
 
-		is: 'meetup-event'
+		is: 'meetup-event',
+
+		properties: {
+			eventName: {
+				type: String,
+				notify: true
+			},
+			eventType: {
+				type: String,
+				notify: true
+			},
+			eventHost: {
+				type: String,
+				notify: true
+			},
+			eventStart: {
+				type: String,
+				notify: true
+			},
+			eventEnd: {
+				type: String,
+				notify: true
+			},
+			eventGuests: {
+				type: String,
+				notify: true
+			},
+			eventLocation: {
+				type: String,
+				notify: true
+			},
+			eventExtraInfo: {
+				type: String,
+				notify: true
+			},
+			eventImage: {
+				type: String,
+				value: 'https://placekitten.com/g/800/600',
+				notify: true
+			},
+
+		}
 
 	});
 
