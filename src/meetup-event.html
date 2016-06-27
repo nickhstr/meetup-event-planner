@@ -1,5 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="meetup-event-container.html">
 
 <dom-module id="meetup-event">
 	<template>
@@ -8,18 +8,19 @@
 				margin: 20px;
 			}
 
-			paper-card {
-				width: 400px;
-				--paper-card-header-color: #fff;
+			meetup-event-container {
+				max-width: 400px;
+				margin: 20px;
 			}
 		</style>
 
-		<paper-card heading="[[eventName]]" image="[[eventImage]]">
+		<meetup-event-container heading="[[eventName]]" image="[[eventImage]]">
 			<div>[[eventType]]</div>
 			<div>[[eventHost]]</div>
+			<div>Start: [[eventStart]] End: [[eventEnd]]</div>
 			<div>[[eventLocation]]</div>
 			<div>[[eventExtraInfo]]</div>
-		</paper-card>
+		</meetup-event-container>
 	</template>
 	<script>
 		
@@ -42,10 +43,12 @@
 			},
 			eventStart: {
 				type: String,
+				value: '',
 				notify: true
 			},
 			eventEnd: {
 				type: String,
+				value: '',
 				notify: true
 			},
 			eventGuests: {
@@ -64,9 +67,8 @@
 				type: String,
 				value: 'https://placekitten.com/g/800/600',
 				notify: true
-			},
-
-		}
+			}
+		},
 
 	});
 

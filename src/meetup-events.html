@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="meetup-title.html">
 <link rel="import" href="meetup-event.html">
@@ -7,10 +8,12 @@
 <dom-module id="meetup-events">
 	<template>
 
-		<style>
+		<style is="custom-style">
 			section {
-				background-color: #a3cee9;
-			}
+				@apply(--layout);
+				@apply(--layout-wrap);
+				@apply(--layout-center-justified);
+			}	
 		</style>
 
 		<firebase-document
@@ -29,18 +32,32 @@
 		<meetup-title title="Events"></meetup-title>
 
 		<section>
-			<div>These are events, made by [[myName]].</div>
-			<input id="eventTitle" type="text">
-			<input id="eventDetails" type="text">
-			<button on-tap="submitInfo">Submit Info</button>
+			<label for="title">Event Name:
+				<input id="eventTitle" type="text" name="title">
+			</label>
+			<label for="image">Event Image:
+				<input id="eventImage" type="text" name="image">
+			</label>
+			<label for="start">Event Start:
+				<input id="eventStart" type="text" name="start">
+			</label>
+			<label for="end">Event End:
+				<input id="eventEnd" type="text" name="end">
+			</label>
+			<label for="host">Event Host:
+				<input id="eventHost" type="text" name="host">
+			</label>
+			<input type="submit" on-tap="submitInfo"></input>
 		</section>
 
 		<section>
-			<template is="dom-repeat" items="[[queryData]]" as="event">
+			<template id="event" is="dom-repeat" items="[[queryData]]" as="event">
 				<meetup-event
 					event-name="[[event.title]]"
-					event-host="[[event.$key]]"
-					event-image="[[event.details]]">
+					event-host="[[event.host]]"
+					event-image="[[event.image]]"
+					event-start="[[event.start]]"
+					event-end="[[event.end]]">
 				</meetup-event>
 			</template>
 		</section>
@@ -73,8 +90,12 @@
 
 			self.data = {
 				title: self.$.eventTitle.value,
-				details: self.$.eventDetails.value
+				image: self.$.eventImage.value,
+				host: self.$.eventHost.value
 			};
+
+			self.data.start = self.$.eventStart.value;
+			self.data.end = self.$.eventEnd.value
 
 			self.$.events.save('/events');
 		}
