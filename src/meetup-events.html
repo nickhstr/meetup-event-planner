@@ -1,9 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="meetup-title.html">
 <link rel="import" href="meetup-event.html">
+<link rel="import" href="meetup-new-event.html">
 
 <dom-module id="meetup-events">
 	<template>
@@ -13,7 +16,16 @@
 				@apply(--layout);
 				@apply(--layout-wrap);
 				@apply(--layout-center-justified);
-			}	
+			}
+
+			paper-fab {
+				--paper-fab-background: var(--secondary-color);
+				--paper-fab-keyboard-focus-background: #104d82;
+				position: fixed;
+				bottom: 40px;
+				right: 40px;
+				z-index: 5;
+			}
 		</style>
 
 		<firebase-document
@@ -49,6 +61,10 @@
 			</label>
 			<input type="submit" on-tap="submitInfo"></input>
 		</section>
+
+		<paper-fab icon="add" label="New Event" on-tap="openEditor"></paper-fab>
+
+		<meetup-new-event id="editor"></meetup-new-event>
 
 		<section>
 			<template id="event" is="dom-repeat" items="[[queryData]]" as="event">
@@ -98,6 +114,10 @@
 			self.data.end = self.$.eventEnd.value
 
 			self.$.events.save('/events');
+		},
+
+		openEditor: function() {
+			this.$.editor.open();
 		}
 
 	});

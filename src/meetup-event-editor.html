@@ -1,0 +1,33 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+
+<dom-module id="meetup-event-editor">
+	<template>
+		<style>
+			
+		</style>
+
+		<paper-dialog
+			id="dialog"
+			entry-animation="scale-up-animation"
+			exit-animation="fade-out-animation">
+			<h2>Edit this event</h2>
+		</paper-dialog>
+	</template>
+
+	<script>
+		
+	Polymer({
+
+		is: 'meetup-event-editor',
+
+		open: function() {
+			return this.$.dialog.open();
+		}
+
+	});
+
+	</script>
+</dom-module>
