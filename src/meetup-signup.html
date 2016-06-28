@@ -10,8 +10,6 @@
 		<style is="custom-style">
 			:host {
 				background-color: var(--light-gray);
-				--paper-input-container-focus-color: var(--secondary-color);
-				--paper-input-container-invalid-color: var(--primary-color);
 			}
 
 			meetup-section {
@@ -57,8 +55,10 @@
 				<meetup-section>
 					<paper-input
 						id="signupfocus"
-						autofocus autocomplete="given-name"
-						label="First Name" value="{{firstname}}"
+						autofocus
+						autocomplete="given-name"
+						label="First Name"
+						value="{{firstname}}"
 						required
 						auto-validate
 						error-message="Requires text only!"
@@ -169,21 +169,21 @@
 		},
 
 		observers: [
-			'compareRoute(page)',
-			'validityCheck(signupFirst, signupLast, signupEmail, signupPass, password)'
+			'_compareRoute(page)',
+			'_validityCheck(signupFirst, signupLast, signupEmail, signupPass, password)'
 		],
 
 		signUp: function(e, detail) {
 			this.fire('sign-up', {firstname: this.firstname, lastname: this.lastname, email: this.email, password: this.password}, {bubbles: false});
 		},
 
-		compareRoute: function(page) {
+		_compareRoute: function(page) {
 			if (page === 'signup') {
 				this.$.signupfocus.focus();
 			}
 		},
 
-		validityCheck: function(signupFirst, signupLast, signupEmail, signupPass, password) {
+		_validityCheck: function(signupFirst, signupLast, signupEmail, signupPass, password) {
 			if (signupFirst === false &&
 				signupLast === false &&
 				signupEmail === false &&

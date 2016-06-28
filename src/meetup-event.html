@@ -1,4 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="meetup-event-container.html">
 
 <dom-module id="meetup-event">
@@ -6,20 +9,49 @@
 		<style>
 			:host {
 				margin: 20px;
+				visibility: hidden;
 			}
 
 			meetup-event-container {
 				max-width: 400px;
 				margin: 20px;
 			}
+
+			div.details {
+				padding: 20px;
+			}
+
+			div.detail {
+				margin: 10px;
+				color: var(--secondary-text);
+			}
+
+			span.text {
+				color: var(--primary-text);
+			}
 		</style>
 
-		<meetup-event-container heading="[[eventName]]" image="[[eventImage]]">
-			<div>[[eventType]]</div>
-			<div>[[eventHost]]</div>
-			<div>Start: [[eventStart]] End: [[eventEnd]]</div>
-			<div>[[eventLocation]]</div>
-			<div>[[eventExtraInfo]]</div>
+		<meetup-event-container heading="[[eventName]]" image="[[eventImage]]" on-tap="openEvent">
+			<div class="details">	
+				<div class="detail">
+					<span class="text"><h3>[[eventType]]</h3></span>
+				</div>
+				<div class="detail">
+					Host: <span class="text">[[eventHost]]</span>
+				</div>
+				<div class="detail">
+					Where: <span class="text">[[eventLocation]]</span>
+				</div>
+				<div class="detail">
+					When: <span class="text">[[eventStart]]</span> to <span class="text">[[eventEnd]]</span>
+				</div>
+				<div class="detail">
+					Guests: <span class="text">[[eventGuests]]</span>
+				</div>
+				<div class="detail">
+					<i>[[eventInfo]]</i>
+				</div>
+			</div>
 		</meetup-event-container>
 	</template>
 	<script>
@@ -28,7 +60,17 @@
 
 		is: 'meetup-event',
 
+		behaviors: [
+			Polymer.NeonAnimationRunnerBehavior
+		],
+
 		properties: {
+			entryAnimation: {
+				value: 'fade-in-animation'
+			},
+			exitAnimation: {
+				value: 'fade-out-animation'
+			},
 			eventName: {
 				type: String,
 				notify: true
@@ -53,22 +95,40 @@
 			},
 			eventGuests: {
 				type: String,
+				value: '',
 				notify: true
 			},
 			eventLocation: {
 				type: String,
+				value: '',
 				notify: true
 			},
-			eventExtraInfo: {
+			eventInfo: {
 				type: String,
+				value: '',
 				notify: true
 			},
 			eventImage: {
 				type: String,
-				value: 'https://placekitten.com/g/800/600',
+				value: '',
+				notify: true
+			},
+			eventId: {
+				type: String,
+				value: '',
 				notify: true
 			}
 		},
+
+		ready: function() {
+			this.style.visibility = 'visible';
+			this.playAnimation('entry');
+		},
+
+		openEvent: function(e, detail) {
+			console.log('openEvent fired');
+			this.fire('open', {eventId: this.eventId}, {bubbles: false});
+		}
 
 	});
 

@@ -3,10 +3,10 @@
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="meetup-title.html">
 <link rel="import" href="meetup-event.html">
 <link rel="import" href="meetup-new-event.html">
+<link rel="import" href="meetup-event-editor.html">
 
 <dom-module id="meetup-events">
 	<template>
@@ -16,6 +16,7 @@
 				@apply(--layout);
 				@apply(--layout-wrap);
 				@apply(--layout-center-justified);
+				background-color: var(--light-gray);
 			}
 
 			paper-fab {
@@ -43,37 +44,29 @@
 
 		<meetup-title title="Events"></meetup-title>
 
-		<section>
-			<label for="title">Event Name:
-				<input id="eventTitle" type="text" name="title">
-			</label>
-			<label for="image">Event Image:
-				<input id="eventImage" type="text" name="image">
-			</label>
-			<label for="start">Event Start:
-				<input id="eventStart" type="text" name="start">
-			</label>
-			<label for="end">Event End:
-				<input id="eventEnd" type="text" name="end">
-			</label>
-			<label for="host">Event Host:
-				<input id="eventHost" type="text" name="host">
-			</label>
-			<input type="submit" on-tap="submitInfo"></input>
-		</section>
+		<paper-fab icon="add" label="New Event" on-tap="openNew"></paper-fab>
 
-		<paper-fab icon="add" label="New Event" on-tap="openEditor"></paper-fab>
+		<meetup-new-event
+			id="newEvent"
+			on-submit="submitInfo">
+		</meetup-new-event>
 
-		<meetup-new-event id="editor"></meetup-new-event>
+		<meetup-event-editor id="editor"></meetup-event-editor>
 
 		<section>
-			<template id="event" is="dom-repeat" items="[[queryData]]" as="event">
+			<template id="event" is="dom-repeat" items="[[queryData]]" as="event" initial-count="1">
 				<meetup-event
 					event-name="[[event.title]]"
+					event-type="[[event.type]]"
 					event-host="[[event.host]]"
 					event-image="[[event.image]]"
 					event-start="[[event.start]]"
-					event-end="[[event.end]]">
+					event-end="[[event.end]]"
+					event-guests="[[event.guests]]"
+					event-location="[[event.location]]"
+					event-info="[[event.info]]"
+					event-id="[[event.$key]]"
+					on-open="openEditor">
 				</meetup-event>
 			</template>
 		</section>
@@ -84,8 +77,6 @@
 	Polymer({
 
 		is: 'meetup-events',
-
-		behaviors: [Polymer.NeonAnimatableBehavior],
 
 		properties: {
 			myName: {
@@ -101,23 +92,31 @@
 			}
 		},
 
-		submitInfo: function() {
+		submitInfo: function(e, detail) {
 			var self = this;
+			var info = e.detail;
 
 			self.data = {
-				title: self.$.eventTitle.value,
-				image: self.$.eventImage.value,
-				host: self.$.eventHost.value
+				title: info.title,
+				image: info.image,
+				type: info.type,
+				host: info.host,
+				start: info.start,
+				end: info.end,
+				guests: info.guests,
+				location: info.location,
+				info: info.info
 			};
-
-			self.data.start = self.$.eventStart.value;
-			self.data.end = self.$.eventEnd.value
 
 			self.$.events.save('/events');
 		},
 
-		openEditor: function() {
-			this.$.editor.open();
+		openNew: function() {
+			this.$.newEvent.open();
+		},
+
+		openEditor: function(e, detail) {
+			this.$.editor.open(e.detail.eventId);
 		}
 
 	});

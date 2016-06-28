@@ -10,10 +10,11 @@
 		</style>
 
 		<paper-dialog
-			id="dialog"
+			id="editorDialog"
 			entry-animation="scale-up-animation"
 			exit-animation="fade-out-animation">
 			<h2>Edit this event</h2>
+			<div>Event ID: {{eventId}}</div>
 		</paper-dialog>
 	</template>
 
@@ -23,8 +24,17 @@
 
 		is: 'meetup-event-editor',
 
-		open: function() {
-			return this.$.dialog.open();
+		properties: {
+			eventId: {
+				type: String,
+				value: '',
+				notify: true
+			}
+		},
+
+		open: function(id) {
+			this.eventId = id;
+			return this.$.editorDialog.open();
 		}
 
 	});

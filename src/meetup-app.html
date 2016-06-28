@@ -19,6 +19,7 @@
 <link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="meetup-home.html">
 
@@ -35,6 +36,9 @@
         --primary-text: rgba(0, 0, 0, 0.8);
         --secondary-text: rgba(0, 0, 0, 0.6);
         --line-spacing: 150%;
+        --paper-input-container-focus-color: var(--secondary-color);
+        --paper-input-container-invalid-color: var(--primary-color);
+        visibility: hidden;
       }
 
       neon-animated-pages {
@@ -169,7 +173,11 @@
           </app-toolbar>
         </app-header>
         
-        <neon-animated-pages selected="[[page]]" attr-for-selected="name" entry-animation="slide-from-bottom-animation" exit-animation="slide-down-animation">
+        <neon-animated-pages
+          selected="[[page]]"
+          attr-for-selected="name"
+          entry-animation="slide-from-bottom-animation"
+          exit-animation="slide-down-animation">
           <meetup-home name="home"></meetup-home>
           <meetup-events name="events"></meetup-events>
           <meetup-signin id="signinPage" name="signin" on-sign-in="signIn" page="[[page]]"></meetup-signin>
@@ -190,7 +198,14 @@
 
       is: 'meetup-app',
 
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+
       properties: {
+        entryAnimation: {
+          value: 'fade-in-animation'
+        },
         title: {
           type: String,
           value: 'Let\'s Meetup!'
@@ -207,14 +222,15 @@
         }
       },
 
+      ready: function() {
+        this.style.visibility = 'visible';
+        this.playAnimation('entry');
+      },
+
       observers: [
         '_routePathChanged(routeData.page)',
         '_signedInChanged(signedIn)'
       ],
-
-      listners: {
-        'add-to-user': 'addToUser'
-      },
 
       _routePathChanged: function(page) {
         if (!this.signedIn) {

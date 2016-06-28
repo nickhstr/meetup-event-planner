@@ -11,8 +11,6 @@
 		<style is="custom-style">
 			:host {
 				background-color: var(--light-gray);
-				--paper-input-container-focus-color: var(--secondary-color);
-				--paper-input-container-invalid-color: var(--primary-color);
 			}
 
 			meetup-section {
@@ -151,14 +149,14 @@
 		},
 
 		observers: [
-			'compareRoute(page)'
+			'_compareRoute(page)'
 		],
 
 		signIn: function(e, detail) {
 			this.fire('sign-in', {email: this.email, password: this.password}, {bubbles: false});
 		},
 
-		compareRoute: function(page) {
+		_compareRoute: function(page) {
 			if (page === 'signin') {
 				this.$.signinfocus.focus();
 			}
