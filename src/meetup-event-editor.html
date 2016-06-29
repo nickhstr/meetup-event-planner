@@ -50,7 +50,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventTitle}}">
+				value="{{eventTitle}}"
+				invalid="{{validTitle}}">
 			</paper-input>
 			<paper-input
 				class="short-detail"
@@ -58,7 +59,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventType}}">
+				value="{{eventType}}"
+				invalid="{{validType}}">
 			</paper-input>
 			<paper-input
 				class="short-detail"
@@ -66,7 +68,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventHost}}">
+				value="{{eventHost}}"
+				invalid="{{validHost}}">
 			</paper-input>
 			<paper-input
 				class="short-detail"
@@ -74,7 +77,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventLocation}}">
+				value="{{eventLocation}}"
+				invalid="{{validLocation}}">
 			</paper-input>
 			<paper-input
 				class="long-detail"
@@ -82,7 +86,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventStart}}">
+				value="{{eventStart}}"
+				invalid="{{validStart}}">
 			</paper-input>
 			<paper-input
 				class="long-detail"
@@ -90,7 +95,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventEnd}}">
+				value="{{eventEnd}}"
+				invalid="{{validEnd}}">
 			</paper-input>
 			<paper-textarea
 				class="long-detail"
@@ -98,7 +104,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventGuests}}">
+				value="{{eventGuests}}"
+				invalid="{{validGuests}}">
 			</paper-textarea>
 			<paper-input
 				class="long-detail"
@@ -114,7 +121,7 @@
 				<paper-icon-button id="deleteButton" icon="delete" on-tap="deleteEvent" alt="Delete Event"></paper-icon-button>
 				<paper-tooltip for="deleteButton">Delete Event</paper-tooltip>
 				<paper-button raised on-tap="close">Cancel</paper-button>
-				<paper-button id="saveButton" raised disabled="[[!formValid]]" on-tap="saveEvent">Save</paper-button>
+				<paper-button id="saveButton" raised disabled$="[[!formValid]]" on-tap="saveEvent">Save</paper-button>
 			</div>
 		</paper-dialog>
 	</template>
@@ -171,6 +178,41 @@
 				value: '',
 				notify: true
 			},
+			validTitle: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validType: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validHost: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validLocation: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validStart: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validEnd: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validGuests: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
 			formValid: {
 				type: Boolean,
 				notify: true
@@ -182,15 +224,15 @@
 		},
 
 		observers: [
-			'_validityCheck(eventTitle, eventType, eventHost, eventStart, eventEnd, eventGuests, eventLocation)'
+			'_validityCheck(validTitle, validType, validHost, validLocation, validStart, validEnd, validGuests)'
 		],
 
-		_validityCheck: function(eventTitle, eventType, eventHost, eventStart, eventEnd, eventGuests, eventLocation) {
+		_validityCheck: function(validTitle, validType, validHost, validLocation, validStart, validEnd, validGuests) {
 			var args = Array.prototype.slice.call(arguments);
 			var argsLength = args.length;
 
 			for (var i = 0; i < argsLength; i++) {
-				if (args[i] === '') {
+				if (args[i] === true) {
 					return this.formValid = false;
 				}
 			}
