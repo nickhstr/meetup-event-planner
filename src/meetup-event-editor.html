@@ -1,20 +1,121 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 
 <dom-module id="meetup-event-editor">
 	<template>
 		<style>
-			
+			paper-dialog {
+				width: 80vw;
+				max-height: 80vh;
+				overflow: scroll;
+			}
+
+			.long-detail {
+				width: 200px;
+				display: inline-block;
+			}
+
+			.short-detail {
+				width: 100px;
+				display: inline-block;
+			}
+
+			.padded {
+				padding: 20px;
+			}
+
+			#saveButton {
+				background-color: var(--secondary-color);
+				color: #fff;
+			}
 		</style>
 
 		<paper-dialog
 			id="editorDialog"
 			entry-animation="scale-up-animation"
-			exit-animation="fade-out-animation">
-			<h2>Edit this event</h2>
-			<div>Event ID: {{eventId}}</div>
+			exit-animation="fade-out-animation"
+			no-cancel-on-outside-click>
+			<h2>Edit Event</h2>
+			<paper-input
+				autofocus
+				class="short-detail"
+				label="Title"
+				required
+				auto-validate
+				error-message="Required"
+				value="{{eventTitle}}">
+			</paper-input>
+			<paper-input
+				class="short-detail"
+				label="Type of Event"
+				required
+				auto-validate
+				error-message="Required"
+				value="{{eventType}}">
+			</paper-input>
+			<paper-input
+				class="short-detail"
+				label="Host"
+				required
+				auto-validate
+				error-message="Required"
+				value="{{eventHost}}">
+			</paper-input>
+			<paper-input
+				class="short-detail"
+				label="Location"
+				required
+				auto-validate
+				error-message="Required"
+				value="{{eventLocation}}">
+			</paper-input>
+			<paper-input
+				class="long-detail"
+				label="Start"
+				required
+				auto-validate
+				error-message="Required"
+				value="{{eventStart}}">
+			</paper-input>
+			<paper-input
+				class="long-detail"
+				label="End"
+				required
+				auto-validate
+				error-message="Required"
+				value="{{eventEnd}}">
+			</paper-input>
+			<paper-textarea
+				class="long-detail"
+				label="Guest List"
+				required
+				auto-validate
+				error-message="Required"
+				value="{{eventGuests}}">
+			</paper-textarea>
+			<paper-input
+				class="long-detail"
+				label="Image URL (optional)"
+				value="{{eventImage}}">
+			</paper-input>
+			<paper-textarea
+				class="long-detail"
+				label="Extra Info (optional)"
+				value="{{eventInfo}}">
+			</paper-textarea>
+			<div class="padded">
+				<paper-icon-button id="deleteButton" icon="delete" on-tap="deleteEvent" alt="Delete Event"></paper-icon-button>
+				<paper-tooltip for="deleteButton">Delete Event</paper-tooltip>
+				<paper-button raised on-tap="close">Cancel</paper-button>
+				<paper-button id="saveButton" raised disabled="[[!formValid]]" on-tap="saveEvent">Save</paper-button>
+			</div>
 		</paper-dialog>
 	</template>
 
@@ -25,16 +126,116 @@
 		is: 'meetup-event-editor',
 
 		properties: {
-			eventId: {
+			eventTitle: {
 				type: String,
 				value: '',
+				notify: true
+			},
+			eventImage: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			eventType: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			eventHost: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			eventStart: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			eventEnd: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			eventGuests: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			eventLocation: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			eventInfo: {
+				type: String,
+				value: '',
+				notify: true
+			},
+			formValid: {
+				type: Boolean,
 				notify: true
 			}
 		},
 
-		open: function(id) {
-			this.eventId = id;
+		ready: function() {
+			this.formValid = false;
+		},
+
+		observers: [
+			'_validityCheck(eventTitle, eventType, eventHost, eventStart, eventEnd, eventGuests, eventLocation)'
+		],
+
+		_validityCheck: function(eventTitle, eventType, eventHost, eventStart, eventEnd, eventGuests, eventLocation) {
+			var args = Array.prototype.slice.call(arguments);
+			var argsLength = args.length;
+
+			for (var i = 0; i < argsLength; i++) {
+				if (args[i] === '') {
+					return this.formValid = false;
+				}
+			}
+
+			return this.formValid = true;
+		},
+
+		open: function(detail) {
+			this.eventTitle = detail.eventTitle;
+			this.eventType = detail.eventType;
+			this.eventHost = detail.eventHost;
+			this.eventLocation = detail.eventLocation;
+			this.eventStart = detail.eventStart;
+			this.eventEnd = detail.eventEnd;
+			this.eventGuests = detail.eventGuests;
+			this.eventImage = detail.eventImage;
+			this.eventInfo = detail.eventInfo;
+
 			return this.$.editorDialog.open();
+		},
+
+		saveEvent: function(e, detail) {
+			var self = this;
+			this.fire('save', {
+				title: self.eventTitle,
+				image: self.eventImage,
+				type: self.eventType,
+				host: self.eventHost,
+				start: self.eventStart,
+				end: self.eventEnd,
+				guests: self.eventGuests,
+				location: self.eventLocation,
+				info: self.eventInfo
+			}, {bubbles: false});
+
+			return this.close();
+		},
+
+		deleteEvent: function(e, detail) {
+			this.fire('delete', null, {bubbles: false});
+			return this.close();
+		},
+
+		close: function() {
+			return this.$.editorDialog.close();
 		}
 
 	});

@@ -2,6 +2,8 @@
 <link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="meetup-event-container.html">
 
 <dom-module id="meetup-event">
@@ -29,9 +31,17 @@
 			span.text {
 				color: var(--primary-text);
 			}
+
+			#editButton {
+				color: var(--secondary-text);
+			}
+
+			#editButton:hover {
+				cursor: pointer;
+			}
 		</style>
 
-		<meetup-event-container heading="[[eventName]]" image="[[eventImage]]" on-tap="openEvent">
+		<meetup-event-container heading="[[eventTitle]]" image="[[eventImage]]">
 			<div class="details">	
 				<div class="detail">
 					<span class="text"><h3>[[eventType]]</h3></span>
@@ -50,6 +60,10 @@
 				</div>
 				<div class="detail">
 					<i>[[eventInfo]]</i>
+				</div>
+				<div>
+					<paper-icon-button id="editButton" icon="create" alt="Edit Event" on-tap="openEvent"></paper-icon-button>
+					<paper-tooltip for="editButton">Edit Event</paper-tooltip>
 				</div>
 			</div>
 		</meetup-event-container>
@@ -71,7 +85,7 @@
 			exitAnimation: {
 				value: 'fade-out-animation'
 			},
-			eventName: {
+			eventTitle: {
 				type: String,
 				notify: true
 			},
@@ -127,7 +141,18 @@
 
 		openEvent: function(e, detail) {
 			console.log('openEvent fired');
-			this.fire('open', {eventId: this.eventId}, {bubbles: false});
+			this.fire('open', {
+				eventTitle: this.eventTitle,
+				eventType: this.eventType,
+				eventHost: this.eventHost,
+				eventStart: this.eventStart,
+				eventEnd: this.eventEnd,
+				eventGuests: this.eventGuests,
+				eventLocation: this.eventLocation,
+				eventInfo: this.eventInfo,
+				eventImage: this.eventImage,
+				eventId: this.eventId
+			}, {bubbles: false});
 		}
 
 	});

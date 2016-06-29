@@ -51,12 +51,12 @@
 			on-submit="submitInfo">
 		</meetup-new-event>
 
-		<meetup-event-editor id="editor"></meetup-event-editor>
+		<meetup-event-editor id="editor" on-delete="delete" on-save="save"></meetup-event-editor>
 
 		<section>
 			<template id="event" is="dom-repeat" items="[[queryData]]" as="event" initial-count="1">
 				<meetup-event
-					event-name="[[event.title]]"
+					event-title="[[event.title]]"
 					event-type="[[event.type]]"
 					event-host="[[event.host]]"
 					event-image="[[event.image]]"
@@ -101,8 +101,8 @@
 				image: info.image,
 				type: info.type,
 				host: info.host,
-				start: info.start,
-				end: info.end,
+				start: moment(info.start).format('MMM Do, YYYY h:mma'),
+				end: moment(info.end).format('MMM Do, YYYY h:mma'),
 				guests: info.guests,
 				location: info.location,
 				info: info.info
@@ -116,7 +116,32 @@
 		},
 
 		openEditor: function(e, detail) {
-			this.$.editor.open(e.detail.eventId);
+			this.$.events.path = '/events/' + e.detail.eventId;
+			this.$.editor.open(e.detail);
+		},
+
+		save: function(e, detail) {
+			var self = this;
+			var info = e.detail;
+
+			self.data = {
+				title: info.title,
+				image: info.image,
+				type: info.type,
+				host: info.host,
+				start: info.start,
+				end: info.end,
+				guests: info.guests,
+				location: info.location,
+				info: info.info
+			};
+
+			self.$.events.setStoredValue(self.$.events.path, self.data);
+		},
+
+		delete: function(e, detail) {
+			this.$.events.destroy();
+			this.$.events.path = '';
 		}
 
 	});
