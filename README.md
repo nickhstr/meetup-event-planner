@@ -1,4 +1,4 @@
-# \<meetup\>
+# \lets-meetup\>
 
 A meetup event planner web app.
 
