@@ -168,7 +168,7 @@
               <a class="navlink" name="signup" href="/signup/" hidden$="[[signedIn]]">Sign Up</a>
               <a class="navlink" name="events" href="/events/" hidden$="[[!signedIn]]">Events</a>
               <a class="navlink" name="user" href="/user/" hidden$="[[!signedIn]]">Me</a>
-              <a class="navlink" on-tap="logout" hidden$="[[!signedIn]]">Logout</a>
+              <a class="navlink" on-tap="logout" href="/" hidden$="[[!signedIn]]">Logout</a>
             </iron-selector>
           </app-toolbar>
         </app-header>
@@ -182,7 +182,7 @@
           <meetup-events name="events"></meetup-events>
           <meetup-signin id="signinPage" name="signin" on-sign-in="signIn" page="[[page]]"></meetup-signin>
           <meetup-signup name="signup" on-sign-up="signUp" page="[[page]]"></meetup-signup>
-          <meetup-user name="user" on-log-user="logUser" on-add-info="addInfo"></meetup-user>
+          <meetup-user name="user" user="[[user]]"></meetup-user>
         </neon-animated-pages>
       
       </app-header-layout>
@@ -234,10 +234,7 @@
 
       _routePathChanged: function(page) {
         if (!this.signedIn) {
-          if (page === 'user') {
-            this.set('routeData.page', 'home');
-          }
-          else if (page === 'events') {
+          if (page === 'user' || page === 'events') {
             this.set('routeData.page', 'signin');
           }
           else {
@@ -283,7 +280,9 @@
             setTimeout(function() {
               self.userInfo = {
                 firstname: e.detail.firstname,
-                lastname: e.detail.lastname
+                lastname: e.detail.lastname,
+                job: e.detail.job,
+                image: e.detail.image
               };
               return self.$.userStuff.setStoredValue(self.$.userStuff.path, self.userInfo)
                 .then(function(data) {
@@ -310,15 +309,6 @@
         if (this.$.auth) {
           this.$.auth.signOut();
         }
-      },
-
-      logUser: function() {
-        console.log(this.userInfo);
-      },
-
-      addInfo: function() {
-        this.userInfo.testing = 'attention please';
-        return this.$.userStuff.setStoredValue(this.$.userStuff.path, this.userInfo);
       }
     });
 

@@ -1,0 +1,45 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+
+</head><body><dom-module id="meetup-event-editor">
+	<template>
+		<style>paper-dialog{width:80vw;max-height:80vh;overflow:scroll;}.long-detail{width:200px;display:inline-block;}.short-detail{width:100px;display:inline-block;}.padded{padding:20px;}#saveButton{background-color:var(--secondary-color);color:#fff;}</style>
+
+		<paper-dialog id="editorDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" no-cancel-on-outside-click="">
+			<h2>Edit Event</h2>
+			<paper-input autofocus="" class="short-detail" label="Title" required="" auto-validate="" error-message="Required" value="{{eventTitle}}" invalid="{{validTitle}}">
+			</paper-input>
+			<paper-input class="short-detail" label="Type of Event" required="" auto-validate="" error-message="Required" value="{{eventType}}" invalid="{{validType}}">
+			</paper-input>
+			<paper-input class="short-detail" label="Host" required="" auto-validate="" error-message="Required" value="{{eventHost}}" invalid="{{validHost}}">
+			</paper-input>
+			<paper-input class="short-detail" label="Location" required="" auto-validate="" error-message="Required" value="{{eventLocation}}" invalid="{{validLocation}}">
+			</paper-input>
+			<paper-input class="long-detail" label="Start" required="" auto-validate="" error-message="Required" value="{{eventStart}}" invalid="{{validStart}}">
+			</paper-input>
+			<paper-input class="long-detail" label="End" required="" auto-validate="" error-message="Required" value="{{eventEnd}}" invalid="{{validEnd}}">
+			</paper-input>
+			<paper-textarea class="long-detail" label="Guest List" required="" auto-validate="" error-message="Required" value="{{eventGuests}}">
+			</paper-textarea>
+			<paper-input class="long-detail" label="Image URL (optional)" value="{{eventImage}}">
+			</paper-input>
+			<paper-textarea class="long-detail" label="Extra Info (optional)" value="{{eventInfo}}">
+			</paper-textarea>
+			<div class="padded">
+				<paper-icon-button id="deleteButton" icon="delete" on-tap="deleteEvent" alt="Delete Event"></paper-icon-button>
+				<paper-tooltip for="deleteButton">Delete Event</paper-tooltip>
+				<paper-button raised="" on-tap="close">Cancel</paper-button>
+				<paper-button id="saveButton" raised="" disabled$="[[!formValid]]" on-tap="saveEvent">Save</paper-button>
+			</div>
+		</paper-dialog>
+	</template>
+
+	<script>Polymer({is:"meetup-event-editor",properties:{eventTitle:{type:String,value:"",notify:!0},eventImage:{type:String,value:"",notify:!0},eventType:{type:String,value:"",notify:!0},eventHost:{type:String,value:"",notify:!0},eventStart:{type:String,value:"",notify:!0},eventEnd:{type:String,value:"",notify:!0},eventGuests:{type:String,value:"",notify:!0},eventLocation:{type:String,value:"",notify:!0},eventInfo:{type:String,value:"",notify:!0},validTitle:{type:Boolean,value:!1,notify:!0},validType:{type:Boolean,value:!1,notify:!0},validHost:{type:Boolean,value:!1,notify:!0},validLocation:{type:Boolean,value:!1,notify:!0},validStart:{type:Boolean,value:!1,notify:!0},validEnd:{type:Boolean,value:!1,notify:!0},formValid:{type:Boolean,notify:!0}},ready:function(){this.formValid=!1},observers:["_validityCheck(validTitle, validType, validHost, validLocation, validStart, validEnd, eventGuests)"],_validityCheck:function(e,t,n,i,o,v,a){return e===!1&&t===!1&&n===!1&&i===!1&&o===!1&&v===!1&&""!==a?this.formValid=!0:this.formValid=!1},open:function(e){return this.eventTitle=e.eventTitle,this.eventType=e.eventType,this.eventHost=e.eventHost,this.eventLocation=e.eventLocation,this.eventStart=e.eventStart,this.eventEnd=e.eventEnd,this.eventGuests=e.eventGuests,this.eventImage=e.eventImage,this.eventInfo=e.eventInfo,this.$.editorDialog.open()},saveEvent:function(e,t){var n=this;return this.fire("save",{title:n.eventTitle,image:n.eventImage,type:n.eventType,host:n.eventHost,start:n.eventStart,end:n.eventEnd,guests:n.eventGuests,location:n.eventLocation,info:n.eventInfo},{bubbles:!1}),this.close()},deleteEvent:function(e,t){return this.fire("delete",null,{bubbles:!1}),this.close()},close:function(){return this.$.editorDialog.close()}});</script>
+</dom-module></body></html>

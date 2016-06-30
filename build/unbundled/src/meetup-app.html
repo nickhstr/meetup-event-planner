@@ -1,0 +1,100 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/helpers/helpers.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="meetup-home.html">
+
+</head><body><dom-module id="meetup-app">
+
+  <template>
+
+    <style>:host{--primary-color:#f52757;--secondary-color:#1e88e5;--light-gray:#eceff1;--dark-gray:#263238;--primary-text:rgba(0, 0, 0, 0.8);--secondary-text:rgba(0, 0, 0, 0.6);--line-spacing:150%;--paper-input-container-focus-color:var(--secondary-color);--paper-input-container-invalid-color:var(--primary-color);visibility:hidden;}neon-animated-pages{height:100%;min-height:100vh;background-color:none;}.header-theme{background-color:#fff;justify-content:space-between;}.drawer-header{background-color:var(--dark-gray);}.content{font-size:3em;}.title{font-family:'Rock Salt', cursive;color:var(--primary-color);padding:10px;}.title:hover{cursor:pointer;}a{text-decoration:none;color:inherit;}a.navlink{padding:10px;font-size:0.75em;color:var(--secondary-text);}a.navlink:hover{cursor:pointer;}a.item{height:100%;width:100%;}paper-ripple{color:#aaa;}paper-tab{--paper-tab-ink:#aaa;}paper-item{cursor:pointer;}@media (max-width: 599px){.header-theme{justify-content:flex-start;}}</style>
+
+    <app-location route="{{route}}"></app-location>
+
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
+    </app-route>
+
+    <firebase-auth id="auth" app-name="meetup" signed-in="{{signedIn}}" user="{{user}}">
+    </firebase-auth>
+
+    <firebase-document id="userStuff" app-name="meetup" path="/users/[[user.uid]]/info" data="{{userInfo}}">
+    </firebase-document>
+
+    <app-drawer-layout fullbleed="" force-narrow="">
+      
+      <app-drawer id="drawer">
+        <app-toolbar class="drawer-header"></app-toolbar>
+        <paper-menu selected="[[page]]" attr-for-selected="name">
+          <paper-item name="signin" hidden$="[[signedIn]]">
+            <a class="item" href="/signin/">Sign In</a>
+          </paper-item>
+          <paper-item name="signup" hidden$="[[signedIn]]">
+            <a class="item" href="/signup/">Sign Up</a>
+          </paper-item>
+          <paper-item name="events">
+            <a class="item" href="/events/" hidden$="[[!signedIn]]">Events</a>
+          </paper-item>
+          <paper-item name="user" hidden$="[[!signedIn]]">
+            <a class="item" href="/user/">Me</a>
+          </paper-item>
+          <paper-item name="logout" hidden$="[[!signedIn]]">
+            <a class="item" on-tap="logout">Logout</a>
+          </paper-item>
+        </paper-menu>
+      </app-drawer>
+      
+      <app-header-layout>
+        <app-header reveals="" shadow="">
+          <app-toolbar class="header-theme">
+            <paper-icon-button icon="menu" drawer-toggle="" hidden$="{{wideLayout}}"></paper-icon-button>
+            <div class="title" style="position: relative">
+              <a href="/">{{title}}</a>
+            </div>
+            <iron-selector selected="[[page]]" attr-for-selected="name" hidden$="{{!wideLayout}}">
+              <a class="navlink" name="signin" href="/signin/" hidden$="[[signedIn]]">Sign In</a>
+              <a class="navlink" name="signup" href="/signup/" hidden$="[[signedIn]]">Sign Up</a>
+              <a class="navlink" name="events" href="/events/" hidden$="[[!signedIn]]">Events</a>
+              <a class="navlink" name="user" href="/user/" hidden$="[[!signedIn]]">Me</a>
+              <a class="navlink" on-tap="logout" href="/" hidden$="[[!signedIn]]">Logout</a>
+            </iron-selector>
+          </app-toolbar>
+        </app-header>
+        
+        <neon-animated-pages selected="[[page]]" attr-for-selected="name" entry-animation="slide-from-bottom-animation" exit-animation="slide-down-animation">
+          <meetup-home name="home"></meetup-home>
+          <meetup-events name="events"></meetup-events>
+          <meetup-signin id="signinPage" name="signin" on-sign-in="signIn" page="[[page]]"></meetup-signin>
+          <meetup-signup name="signup" on-sign-up="signUp" page="[[page]]"></meetup-signup>
+          <meetup-user name="user" user="[[user]]"></meetup-user>
+        </neon-animated-pages>
+      
+      </app-header-layout>
+    </app-drawer-layout>
+
+    <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
+
+  </template>
+
+  <script>Polymer({is:"meetup-app",behaviors:[Polymer.NeonAnimationRunnerBehavior],properties:{entryAnimation:{value:"fade-in-animation"},title:{type:String,value:"Let's Meetup!"},wideLayout:{type:Boolean,value:!1,observer:"_onLayoutChange"},page:{type:String,reflectToAttribute:!0,observer:"_pageChanged"}},ready:function(){this.style.visibility="visible",this.playAnimation("entry")},observers:["_routePathChanged(routeData.page)","_signedInChanged(signedIn)"],_routePathChanged:function(e){this.signedIn?this.page=e||"home":"user"===e||"events"===e?this.set("routeData.page","signin"):this.page=e||"home",Polymer.AppLayout.scroll({top:0,behavior:"smooth"})},_signedInChanged:function(e){e===!0?this.set("routeData.page","events"):e===!1&&this.set("routeData.page","")},_onLayoutChange:function(e){var t=this.$.drawer;e&&t.opened&&(t.opened=!1)},_pageChanged:function(e,t){e&&(this.importHref(this.resolveUrl("meetup-"+e+".html"),null,null,!0),this.$.drawer.opened=!1)},signUp:function(e){var t=this;this.$.auth.createUserWithEmailAndPassword(e.detail.email,e.detail.password).then(function(n){setTimeout(function(){return t.userInfo={firstname:e.detail.firstname,lastname:e.detail.lastname,job:e.detail.job,image:e.detail.image},t.$.userStuff.setStoredValue(t.$.userStuff.path,t.userInfo).then(function(e){console.log(t.userInfo)})},1e3)})},signIn:function(e){var t=this;this.$.auth.signInWithEmailAndPassword(e.detail.email,e.detail.password).then(function(e){e&&(t.$.signinPage.signInError=!1)},function(e){t.$.signinPage.signInError=!0,t.$.signinPage.errorMessage=e.message||"Invalid email or password."})},logout:function(){this.$.auth&&this.$.auth.signOut()}});</script>
+
+</dom-module></body></html>

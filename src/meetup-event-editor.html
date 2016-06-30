@@ -104,8 +104,7 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventGuests}}"
-				invalid="{{validGuests}}">
+				value="{{eventGuests}}">
 			</paper-textarea>
 			<paper-input
 				class="long-detail"
@@ -208,11 +207,6 @@
 				value: false,
 				notify: true
 			},
-			validGuests: {
-				type: Boolean,
-				value: false,
-				notify: true
-			},
 			formValid: {
 				type: Boolean,
 				notify: true
@@ -224,20 +218,22 @@
 		},
 
 		observers: [
-			'_validityCheck(validTitle, validType, validHost, validLocation, validStart, validEnd, validGuests)'
+			'_validityCheck(validTitle, validType, validHost, validLocation, validStart, validEnd, eventGuests)'
 		],
 
-		_validityCheck: function(validTitle, validType, validHost, validLocation, validStart, validEnd, validGuests) {
-			var args = Array.prototype.slice.call(arguments);
-			var argsLength = args.length;
-
-			for (var i = 0; i < argsLength; i++) {
-				if (args[i] === true) {
-					return this.formValid = false;
-				}
+		_validityCheck: function(validTitle, validType, validHost, validLocation, validStart, validEnd, eventGuests) {
+			if (validTitle === false &&
+					validType === false &&
+					validHost === false &&
+					validLocation === false &&
+					validStart === false &&
+					validEnd === false &&
+					eventGuests !== '') {
+				return this.formValid = true;
 			}
-
-			return this.formValid = true;
+			else {
+				return this.formValid = false;
+			}
 		},
 
 		open: function(detail) {

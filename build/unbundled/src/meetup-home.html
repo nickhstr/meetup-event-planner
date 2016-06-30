@@ -1,0 +1,69 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-behaviors/paper-button-behavior.html">
+<link rel="import" href="meetup-section.html">
+
+</head><body><dom-module id="meetup-home">
+	
+	<template>
+		<style is="custom-style">main{background-color:#fff;}section{padding:80px 20px;}section.footer{padding:40px 20px;}.underline{padding:0 0 5px 0;border-bottom:1px solid var(--primary-color);}.main-section{background-color:var(--light-gray);}[dead-center]{@apply (--layout);@apply (--layout-center-center);}.dark-gray{background-color:var(--dark-gray);color:#fff;}.title-img{margin:20px;width:175px;height:175px;border-radius:100%;background-color:var(--primary-color);box-shadow:0px 3px 3px 1px rgba(0, 0, 0, 0.2);}.main-detail{max-width:50vw;padding:20px;}.event-icon{--iron-icon-height:80px;--iron-icon-width:80px;color:white;}.btn{background-color:#1e88e5;color:#fff;}a{text-decoration:none;}p{font-weight:lighter;line-height:var(--line-spacing);color:var(--primary-text);}p.light{color:#fff;}meetup-section{margin:20px;}h1{font-family:'Slabo 13px', serif;font-size:1.75em;}.subdetail{width:37vw;margin:20px;}.love{color:var(--primary-color);}@media (max-width: 739px){.title-img{display:none !important;}.main-detail{max-width:75vw;}.subdetail{width:75vw;}section{padding:40px 20px;}}</style>
+
+		<main>
+			<section class="main-section" dead-center="">
+				<meetup-section>
+					<div dead-center="" class="title-img" id="title-img">
+						<iron-icon class="event-icon" icon="event"></iron-icon>
+					</div>
+					<div class="main-detail">
+						<h1 class="underline">Where are we meeting?</h1>
+						<p>
+							Keep track of all your meet-up events in one place, from anywhere in the world. Let's Meetup is simple and straightforward, allowing you to spend less time on planning and managing your event, and more time on getting back to your life. 
+						</p>
+						<div>
+							<a href="/events" tabindex="-1">
+								<paper-button class="btn" raised="">View Events</paper-button>
+							</a>
+						</div>
+					</div>
+				</meetup-section>
+			</section>
+
+			<section dead-center="" class="dark-gray">
+				<meetup-section>
+					<div class="subdetail">
+						<h1 class="underline">All the cool kids are doing it</h1>
+							<p class="light">
+								Haven't you heard? Let's Meetup is the greatest! Forget using an existing mature and proven online platform for managing your events. Use a brand new relatively unknown app, and trust someone you don't know with your information!
+							</p>
+							<div>
+								<a href="/signup" tabindex="-1">
+									<paper-button class="btn" raised="">Sign Up</paper-button>
+								</a>
+							</div>
+					</div>
+					<div class="subdetail">
+						<h1 class="underline">You're already a cool kid</h1>
+							<p class="light">
+								Yeah, you already know just how awesome this app is. So what are you doing on the home page? You're not new to this; sign in and get back to your events! Who knows what's changed since you've last been here.
+							</p>
+							<div>
+								<a href="/signin" tabindex="-1">
+									<paper-button class="btn" raised="">Sign In</paper-button>
+								</a>
+							</div>
+					</div>
+				</meetup-section>
+			</section>
+
+			<section dead-center="" class="footer">
+				<p>Made with <iron-icon class="love" icon="favorite"></iron-icon> by Nick Hester</p>
+			</section>
+		</main>
+
+	</template>
+
+	<script>Polymer({is:"meetup-home"});</script>
+
+</dom-module></body></html>

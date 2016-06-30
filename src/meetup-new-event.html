@@ -48,7 +48,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventTitle}}">
+				value="{{eventTitle}}"
+				invalid="{{validTitle}}">
 			</paper-input>
 			<paper-input
 				class="short-detail"
@@ -56,7 +57,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventType}}">
+				value="{{eventType}}"
+				invalid="{{validType}}">
 			</paper-input>
 			<paper-input
 				class="short-detail"
@@ -64,7 +66,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventHost}}">
+				value="{{eventHost}}"
+				invalid="{{validHost}}">
 			</paper-input>
 			<paper-input
 				class="short-detail"
@@ -72,7 +75,8 @@
 				required
 				auto-validate
 				error-message="Required"
-				value="{{eventLocation}}">
+				value="{{eventLocation}}"
+				invalid="{{validLocation}}">
 			</paper-input>
 			<paper-input
 				class="long-detail"
@@ -81,7 +85,8 @@
 				auto-validate
 				error-message="Required"
 				value="{{eventStart}}"
-				type="datetime-local">
+				type="datetime-local"
+				invalid="{{validStart}}">
 			</paper-input>
 			<paper-input
 				class="long-detail"
@@ -90,7 +95,8 @@
 				auto-validate
 				error-message="Required"
 				value="{{eventEnd}}"
-				type="datetime-local">
+				type="datetime-local"
+				invalid="{{validEnd}}">
 			</paper-input>
 			<paper-textarea
 				class="long-detail"
@@ -169,6 +175,36 @@
 				value: '',
 				notify: true
 			},
+			validTitle: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validType: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validHost: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validStart: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validEnd: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
+			validLocation: {
+				type: Boolean,
+				value: false,
+				notify: true
+			},
 			formValid: {
 				type: Boolean,
 				notify: true
@@ -180,7 +216,7 @@
 		},
 
 		observers: [
-			'_validityCheck(eventTitle, eventType, eventHost, eventStart, eventEnd, eventGuests, eventLocation)'
+			'_validityCheck(validTitle, validType, validHost, validStart, validEnd, validLocation, eventGuests)'
 		],
 
 		open: function() {
@@ -217,17 +253,26 @@
 			return this.close();
 		},
 
-		_validityCheck: function(eventTitle, eventType, eventHost, eventStart, eventEnd, eventGuests, eventLocation) {
-			var args = Array.prototype.slice.call(arguments);
-			var argsLength = args.length;
+		_validityCheck: function(validTitle, validType, validHost, validStart, validEnd, validLocation, eventGuests) {
+			// var args = Array.prototype.slice.call(arguments);
+			// var argsLength = args.length;
 
-			for (var i = 0; i < argsLength; i++) {
-				if (args[i] === '') {
-					return this.formValid = false;
-				}
+			// for (var i = 0; i < argsLength; i++) {
+			// 	if (args[i] === '') {
+			// 		return this.formValid = false;
+			// 	}
+			// }
+			if (validTitle === false &&
+					validType === false &&
+					validHost === false &&
+					validStart === false &&
+					validEnd === false &&
+					validLocation === false &&
+					eventGuests !== '') {
+				return this.formValid = true;
 			}
 
-			return this.formValid = true;
+			return this.formValid = false;
 		}
 
 	});

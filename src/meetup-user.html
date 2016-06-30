@@ -1,12 +1,42 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="meetup-title.html">
+<link rel="import" href="meetup-user-card.html">
 
 <dom-module id="meetup-user">
 	<template>
 		<style>
+			:host {
+				background-color: var(--light-gray);
+			}
 			
+			section.user-info {
+				@apply(--layout);
+				@apply(--layout-center-center);
+			}
 		</style>
-		<button on-tap="addHandler">Add</button>
-		<button on-tap="logHandler">Log</button>
+
+		<firebase-document
+			id="userDoc"
+			app-name="meetup"
+			path="/users/[[user.uid]]/info"
+			data="{{userData}}">
+		</firebase-document>
+
+		<meetup-title title="Hi, [[userData.firstname]]!"></meetup-title>
+
+		<section class="user-info">
+			<meetup-user-card
+				firstname="[[userData.firstname]]"
+				lastname="[[userData.lastname]]"
+				email="[[user.email]]"
+				job="[[userData.job]]"
+				image="[[userData.image]]">
+			</meetup-user-card>
+		</section>
+		
 	</template>
 	<script>
 		
@@ -14,12 +44,19 @@
 
 		is: 'meetup-user',
 
-		logHandler: function(e, detail) {
-			this.fire('log-user');
+		properties: {
+			user: {
+				type: Object,
+				value: {},
+				notify: true
+			},
+			userData: {
+				notify: true
+			}
 		},
 
-		addHandler: function(e, detail) {
-			this.fire('add-info');
+		logUser: function() {
+			console.log(this.userData);
 		}
 
 	})
