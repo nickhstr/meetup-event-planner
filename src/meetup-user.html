@@ -1,3 +1,11 @@
+<!-- 
+
+USER VIEW
+
+This view serves to provide a (very) simple overview of the current user and their basic info.
+
+ -->
+
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
@@ -18,6 +26,7 @@
 			}
 		</style>
 
+		<!-- Provides access to the currents user's info in the database. -->
 		<firebase-document
 			id="userDoc"
 			app-name="meetup"
@@ -53,10 +62,6 @@
 			userData: {
 				notify: true
 			}
-		},
-
-		logUser: function() {
-			console.log(this.userData);
 		}
 
 	})

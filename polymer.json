@@ -1,11 +1,10 @@
 {
-  "entrypoint": "index.html",
-  "shell": "src/meetup-app/meetup-app.html",
-  "fragments": [
-    "src/meetup-signin.html",
-    "src/meetup-signup.html",
-    "src/meetup-events.html",
-    "src/meetup-home.html",
-    "src/meetup-user.html",
-  ]
+	"entrypoint": "index.html",
+	"shell": "src/meetup-app.html",
+	"fragments": [
+		"src/meetup-events.html",
+		"src/meetup-user.html",
+		"src/meetup-signin.html",
+		"src/meetup-signup.html"
+	]
 }

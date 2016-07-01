@@ -1,3 +1,11 @@
+<!-- 
+
+NEW EVENT FORM
+
+A dialog box made visible when the user fires taps the "openNew" button. Form submission and validation is similiar to the sign-up and sign-in forms.
+
+ -->
+
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -219,10 +227,12 @@
 			'_validityCheck(validTitle, validType, validHost, validStart, validEnd, validLocation, eventGuests)'
 		],
 
+		// Function called by the "openNew" event handler in the meetup-events component
 		open: function() {
 			return this.$.newDialog.open();
 		},
 
+		// Called by cancel button. Empties the form and closes the dialog box.
 		close: function() {
 			this.eventTitle = '';
 			this.eventImage = '';
@@ -236,6 +246,7 @@
 			return this.$.newDialog.close();
 		},
 
+		// Fires a submit event with event information to the meetup-events component
 		submit: function(e, detail) {
 			var self = this;
 			this.fire('submit', {
@@ -253,15 +264,8 @@
 			return this.close();
 		},
 
+		// Same validation strategy employed by the sign-up and sign-in forms
 		_validityCheck: function(validTitle, validType, validHost, validStart, validEnd, validLocation, eventGuests) {
-			// var args = Array.prototype.slice.call(arguments);
-			// var argsLength = args.length;
-
-			// for (var i = 0; i < argsLength; i++) {
-			// 	if (args[i] === '') {
-			// 		return this.formValid = false;
-			// 	}
-			// }
 			if (validTitle === false &&
 					validType === false &&
 					validHost === false &&

@@ -1,3 +1,11 @@
+<!-- 
+
+SIGN-IN VIEW
+
+Much like the sign-up view, this submits info for user authentication.
+
+ -->
+
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -19,6 +27,7 @@
 
 			section {
 				padding: 40px 20px;
+				background-color: var(--light-gray);
 			}
 
 			[dead-center] {
@@ -75,6 +84,7 @@
 
 		<meetup-title title="Sign In"></meetup-title>
 		
+		<!-- Just as with the sign-up view, the form element is for semantic purposes only; no form submission is done with the form element. The sign-in button fires an event with user info for the meetup-app to handle. -->
 		<form>
 			<section dead-center>
 				<meetup-section>
@@ -152,10 +162,12 @@
 			'_compareRoute(page)'
 		],
 
+		// Sign in event, with user info
 		signIn: function(e, detail) {
 			this.fire('sign-in', {email: this.email, password: this.password}, {bubbles: false});
 		},
 
+		// Observer which focuses the first input if the current view is "signin"
 		_compareRoute: function(page) {
 			if (page === 'signin') {
 				this.$.signinfocus.focus();

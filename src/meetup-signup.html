@@ -1,3 +1,11 @@
+<!-- 
+
+SIGNUP VIEW
+
+This view handles user creation, and is only imported into meetup-app when requested.
+
+ -->
+
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -55,6 +63,8 @@
 
 		<meetup-title title="Sign Up"></meetup-title>
 		
+		<!-- The form for signing up. Note, the form is purely for semantic value, and does not actually submit information; rather the submit button fires a signUp event for the meetup-app component to handle. This allowed me more freedom in submitting information, and avoided the headache of form submission in a single-page application.
+		Each paper-input includes a label, an aria-label, immediate validation, as well as all the other attributes included with the native input element. -->
 		<form>
 			<section dead-center>
 				<meetup-section>
@@ -196,6 +206,7 @@
 			'_validityCheck(signupFirst, signupLast, signupEmail, signupPass, password)'
 		],
 
+		// Signup event fired for meetup-app to handle, including new user information
 		signUp: function(e, detail) {
 			this.fire('sign-up', {
 				firstname: this.firstname,
@@ -207,12 +218,15 @@
 			}, {bubbles: false});
 		},
 
+		// This observer watches the current route.
+		// If the current route is "signup", have the first input focused.
 		_compareRoute: function(page) {
 			if (page === 'signup') {
 				this.$.signupfocus.focus();
 			}
 		},
 
+		// Simple form validation, preventing the user from submitting unless all required inputs are valid
 		_validityCheck: function(signupFirst, signupLast, signupEmail, signupPass, password) {
 			if (signupFirst === false &&
 				signupLast === false &&

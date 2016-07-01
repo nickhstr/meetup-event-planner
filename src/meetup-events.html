@@ -1,3 +1,11 @@
+<!-- 
+
+EVENTS VIEW
+
+This view displays all the events in this app's database, organized from oldest to newest. This view is only visible to signed-in users.
+
+ -->
+
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -29,12 +37,14 @@
 			}
 		</style>
 
+		<!-- Acess to events document for editing, with its path determined by functions below -->
 		<firebase-document
 			id="events"
 			app-name="meetup"
 			data="{{data}}">
 		</firebase-document>
 
+		<!-- Queries the database for events by their unique ID -->
 		<firebase-query
 			id="eventsQuery"
 			app-name="meetup"
@@ -44,15 +54,19 @@
 
 		<meetup-title title="Events"></meetup-title>
 
+		<!-- New event button -->
 		<paper-fab icon="add" label="New Event" on-tap="openNew"></paper-fab>
 
+		<!-- Opened when above button is tapped -->
 		<meetup-new-event
 			id="newEvent"
 			on-submit="submitInfo">
 		</meetup-new-event>
 
+		<!-- Opened when the event's edit button is tapped -->
 		<meetup-event-editor id="editor" on-delete="delete" on-save="save"></meetup-event-editor>
 
+		<!-- Creates new meetup-event for every event returned from the firebase query -->
 		<section>
 			<template id="event" is="dom-repeat" items="[[queryData]]" as="event" initial-count="1">
 				<meetup-event
@@ -92,10 +106,11 @@
 			}
 		},
 
+		// Save new event information to database under a unique ID, and resets the firebase-document path
 		submitInfo: function(e, detail) {
 			var self = this;
 			var info = e.detail;
-
+			
 			self.data = {
 				title: info.title,
 				image: info.image,
@@ -109,39 +124,47 @@
 			};
 
 			self.$.events.save('/events');
+			self.$.events.path = null;
 		},
 
+		// Opens the new-event dialog box
 		openNew: function() {
 			this.$.newEvent.open();
 		},
 
+		// Opens the event editor with the event's info
 		openEditor: function(e, detail) {
 			this.$.events.path = '/events/' + e.detail.eventId;
 			this.$.editor.open(e.detail);
 		},
 
+		// Saves the event's info to it's path in the database, and then resets the path
 		save: function(e, detail) {
 			var self = this;
 			var info = e.detail;
 
 			self.data = {
 				title: info.title,
-				image: info.image,
+				image: info.image || '',
 				type: info.type,
 				host: info.host,
 				start: info.start,
 				end: info.end,
 				guests: info.guests,
 				location: info.location,
-				info: info.info
+				info: info.info || ''
 			};
 
-			self.$.events.setStoredValue(self.$.events.path, self.data);
+			self.$.events.setStoredValue(self.$.events.path, self.data)
+				.then(function() {
+					self.$.events.path = null;
+				});
 		},
 
+		// Deletes the event from the database, and the view updates immediately.
 		delete: function(e, detail) {
 			this.$.events.destroy();
-			this.$.events.path = '';
+			this.$.events.path = null;
 		}
 
 	});
