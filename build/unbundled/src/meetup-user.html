@@ -1,0 +1,25 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="meetup-title.html">
+<link rel="import" href="meetup-user-card.html">
+
+</head><body><dom-module id="meetup-user">
+	<template>
+		<style>:host{background-color:var(--light-gray);}section.user-info{@apply (--layout);@apply (--layout-center-center);}</style>
+
+		
+		<firebase-document id="userDoc" app-name="meetup" path="/users/[[user.uid]]/info" data="{{userData}}">
+		</firebase-document>
+
+		<meetup-title title="Hi, [[userData.firstname]]!"></meetup-title>
+
+		<section class="user-info">
+			<meetup-user-card firstname="[[userData.firstname]]" lastname="[[userData.lastname]]" email="[[user.email]]" job="[[userData.job]]" image="[[userData.image]]">
+			</meetup-user-card>
+		</section>
+		
+	</template>
+	<script>Polymer({is:"meetup-user",properties:{user:{type:Object,value:{},notify:!0},userData:{notify:!0}}});</script>
+</dom-module></body></html>

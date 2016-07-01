@@ -1,0 +1,40 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="meetup-section.html">
+<link rel="import" href="meetup-title.html">
+
+</head><body><dom-module id="meetup-signin">
+	<template>
+		<style is="custom-style">:host{background-color:var(--light-gray);}meetup-section{margin:0 80px;}section{padding:40px 20px;background-color:var(--light-gray);}[dead-center]{@apply (--layout);@appply (--layout-wrap);@apply (--layout-center-center);}section.submit{padding:0;}section.error-message{}h2.error{color:black;font-weight:lighter;margin:0 10px;}#iconError{color:var(--primary-color);width:30px;height:30px;display:block;}paper-input{width:400px;margin:10px 20px;}paper-button{margin:0 80px;background-color:var(--secondary-color);color:#fff;}.box{width:50px;height:50px;background-color:red;}@media (max-width: 739px){paper-input{width:75vw;}}</style>
+
+		<meetup-title title="Sign In"></meetup-title>
+		
+		
+		<form>
+			<section dead-center="">
+				<meetup-section>
+					<paper-input id="signinfocus" autofocus="" autocomplete="email" auto-validate="" error-message="Don't forget your email!" label="Email" type="email" value="{{email}}" required="">
+					</paper-input>
+					<paper-input autocomplete="password" auto-validate="" error-message="Don't forget your password!" label="Password" type="password" value="{{password}}" required="">
+					</paper-input>
+				</meetup-section>
+			</section>
+
+			<section class="submit" dead-center="">
+				<paper-button raised="" on-tap="signIn" aria-label="Sign In" type="submit">Sign In</paper-button>
+			</section>
+		</form>
+
+		<section class="error-message" dead-center="" hidden$="{{!signInError}}">
+			<div>
+				<iron-icon id="iconError" icon="error"></iron-icon>
+			</div>
+			<h2 class="error">Whoops! [[errorMessage]]</h2>
+		</section>
+
+	</template>
+	<script>Polymer({is:"meetup-signin",properties:{email:{type:String,value:"",notify:!0},password:{type:String,value:"",notify:!0},page:{type:String,value:"",notify:!0,reflectToAttribute:!0},signInError:{type:Boolean,value:!1,notify:!0},errorMessage:{type:String,notify:!0}},observers:["_compareRoute(page)"],signIn:function(e,i){this.fire("sign-in",{email:this.email,password:this.password},{bubbles:!1})},_compareRoute:function(e){"signin"===e&&this.$.signinfocus.focus()}});</script>
+</dom-module></body></html>
