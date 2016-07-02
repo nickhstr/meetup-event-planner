@@ -8,31 +8,39 @@
 
 </head><body><dom-module id="meetup-new-event">
 	<template>
-		<style>paper-dialog{width:80vw;max-height:80vh;overflow:scroll;}.long-detail{width:200px;display:inline-block;}.short-detail{width:100px;display:inline-block;}.padded{padding:20px;}#createButton{background-color:var(--secondary-color);color:#fff;}</style>
+		<style>paper-dialog{width:80vw;max-height:80vh;overflow:scroll;}.detail{width:200px;display:inline-block;}.padded{padding:20px;}.cancel{background-color:#fff;color:var(--primary-text);}@media (max-width: 599px){paper-dialog{width:100vw;}.detail{width:80%;}}</style>
 
 		<paper-dialog id="newDialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" no-cancel-on-outside-click="">
 			<h2>Create a New Event</h2>
-			<paper-input autofocus="" class="short-detail" label="Title" required="" auto-validate="" error-message="Required" value="{{eventTitle}}" invalid="{{validTitle}}">
+			<paper-input autofocus="" class="detail" label="Title" required="" auto-validate="" error-message="Required" value="{{eventTitle}}" invalid="{{validTitle}}">
 			</paper-input>
-			<paper-input class="short-detail" label="Type of Event" required="" auto-validate="" error-message="Required" value="{{eventType}}" invalid="{{validType}}">
+			<paper-input class="detail" label="Type of Event" required="" auto-validate="" error-message="Required" value="{{eventType}}" invalid="{{validType}}" list="newtypes">
 			</paper-input>
-			<paper-input class="short-detail" label="Host" required="" auto-validate="" error-message="Required" value="{{eventHost}}" invalid="{{validHost}}">
+			<datalist id="newtypes">
+				<option value="Party"></option>
+				<option value="Rave"></option>
+				<option value="Picnic"></option>
+				<option value="Hackathon"></option>
+				<option value="Competition"></option>
+				<option value="Study Session"></option>
+			</datalist>
+			<paper-input class="detail" label="Host" required="" auto-validate="" error-message="Required" value="{{eventHost}}" invalid="{{validHost}}">
 			</paper-input>
-			<paper-input class="short-detail" label="Location" required="" auto-validate="" error-message="Required" value="{{eventLocation}}" invalid="{{validLocation}}">
+			<paper-input class="detail" label="Location" required="" auto-validate="" autocomplete="street-address" error-message="Required" value="{{eventLocation}}" invalid="{{validLocation}}">
 			</paper-input>
-			<paper-input class="long-detail" label="Start" required="" auto-validate="" error-message="Required" value="{{eventStart}}" type="datetime-local" invalid="{{validStart}}">
+			<paper-input class="detail" label="Start" required="" auto-validate="" error-message="Required" value="{{eventStart}}" type="datetime-local" invalid="{{validStart}}">
 			</paper-input>
-			<paper-input class="long-detail" label="End" required="" auto-validate="" error-message="Required" value="{{eventEnd}}" type="datetime-local" invalid="{{validEnd}}">
+			<paper-input class="detail" label="End" required="" auto-validate="" error-message="Required. No earlier than start date." value="{{eventEnd}}" type="datetime-local" invalid="{{validEnd}}" min="[[eventStart]]">
 			</paper-input>
-			<paper-textarea class="long-detail" label="Guest List" required="" auto-validate="" error-message="Required" value="{{eventGuests}}">
+			<paper-textarea class="detail" label="Guest List" required="" auto-validate="" error-message="Required" value="{{eventGuests}}">
 			</paper-textarea>
-			<paper-input class="long-detail" label="Image URL (optional)" value="{{eventImage}}">
+			<paper-input class="detail" label="Image URL (optional)" value="{{eventImage}}">
 			</paper-input>
-			<paper-textarea class="long-detail" label="Extra Info (optional)" value="{{eventInfo}}">
+			<paper-textarea class="detail" label="Extra Info (optional)" value="{{eventInfo}}">
 			</paper-textarea>
 			<div class="padded">
-				<paper-button raised="" on-tap="close">Cancel</paper-button>
-				<paper-button id="createButton" raised="" disabled="[[!formValid]]" on-tap="submit">Create</paper-button>
+				<paper-button class="cancel" raised="" on-tap="close">Cancel</paper-button>
+				<paper-button raised="" disabled$="[[!formValid]]" on-tap="submit">Create</paper-button>
 			</div>
 		</paper-dialog>
 	</template>
