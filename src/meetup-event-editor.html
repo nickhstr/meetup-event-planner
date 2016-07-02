@@ -26,6 +26,10 @@ For reference, this component's structure and functionality is almost the exact 
 				overflow: scroll;
 			}
 
+			form {
+				display: inline-block;
+			}
+
 			.detail {
 				width: 200px;
 				display: inline-block;
@@ -68,6 +72,8 @@ For reference, this component's structure and functionality is almost the exact 
 				value="{{eventTitle}}"
 				invalid="{{validTitle}}">
 			</paper-input>
+			<!-- "form" element enables datalist functionality -->
+			<form>
 			<paper-input
 				class="detail"
 				label="Type of Event"
@@ -86,6 +92,7 @@ For reference, this component's structure and functionality is almost the exact 
 				<option value="Competition"></option>
 				<option value="Study Session"></option>
 			</datalist>
+			</form>
 			<paper-input
 				class="detail"
 				label="Host"

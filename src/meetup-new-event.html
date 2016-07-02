@@ -23,6 +23,10 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				overflow: scroll;
 			}
 
+			form {
+				display: inline-block;
+			}
+
 			.detail {
 				width: 200px;
 				display: inline-block;
@@ -65,6 +69,8 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				value="{{eventTitle}}"
 				invalid="{{validTitle}}">
 			</paper-input>
+			<!-- "form" element enables datalist functionality -->
+			<form>
 			<paper-input
 				class="detail"
 				label="Type of Event"
@@ -83,6 +89,7 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				<option value="Competition"></option>
 				<option value="Study Session"></option>
 			</datalist>
+			</form>
 			<paper-input
 				class="detail"
 				label="Host"
