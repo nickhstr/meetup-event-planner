@@ -17,9 +17,6 @@ Much like the sign-up view, this submits info for user authentication.
 <dom-module id="meetup-signin">
 	<template>
 		<style is="custom-style">
-			:host {
-				background-color: var(--light-gray);
-			}
 
 			meetup-section {
 				margin: 0 80px;
@@ -27,7 +24,6 @@ Much like the sign-up view, this submits info for user authentication.
 
 			section {
 				padding: 40px 20px;
-				background-color: var(--light-gray);
 			}
 
 			[dead-center] {
@@ -38,10 +34,6 @@ Much like the sign-up view, this submits info for user authentication.
 
 			section.submit {
 				padding: 0;
-			}
-
-			section.error-message {
-				
 			}
 
 			h2.error {
@@ -64,8 +56,6 @@ Much like the sign-up view, this submits info for user authentication.
 
 			paper-button {
 				margin: 0 80px;
-				background-color: var(--secondary-color);
-				color: #fff;
 			}
 
 			.box {
@@ -100,7 +90,7 @@ Much like the sign-up view, this submits info for user authentication.
 						required>
 					</paper-input>
 					<paper-input
-						autocomplete="password"
+						autocomplete="current-password"
 						auto-validate
 						error-message="Don't forget your password!"
 						label="Password"
@@ -112,11 +102,16 @@ Much like the sign-up view, this submits info for user authentication.
 			</section>
 
 			<section class="submit" dead-center>
-				<paper-button raised on-tap="signIn" aria-label="Sign In" type="submit">Sign In</paper-button>
+				<paper-button
+				raised
+				on-tap="signIn"
+				aria-label="Sign In"
+				type="submit"
+				disabled$="[[!canSubmit]]">Sign In</paper-button>
 			</section>
 		</form>
 
-		<section class="error-message" dead-center hidden$="{{!signInError}}">
+		<section dead-center hidden$="{{!signInError}}">
 			<div>
 				<iron-icon id="iconError" icon="error"></iron-icon>
 			</div>
@@ -147,6 +142,10 @@ Much like the sign-up view, this submits info for user authentication.
 				notify: true,
 				reflectToAttribute: true
 			},
+			canSubmit: {
+				type: Boolean,
+				notify: true
+			},
 			signInError: {
 				type: Boolean,
 				value: false,
@@ -159,7 +158,8 @@ Much like the sign-up view, this submits info for user authentication.
 		},
 
 		observers: [
-			'_compareRoute(page)'
+			'_compareRoute(page)',
+			'_inputsCheck(email, password)'
 		],
 
 		// Sign in event, with user info
@@ -171,6 +171,15 @@ Much like the sign-up view, this submits info for user authentication.
 		_compareRoute: function(page) {
 			if (page === 'signin') {
 				this.$.signinfocus.focus();
+			}
+		},
+
+		_inputsCheck: function(email, password) {
+			if (email !== '' && password !== '') {
+				this.canSubmit = true;
+			}
+			else {
+				this.canSubmit = false;
 			}
 		}
 

@@ -23,13 +23,8 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				overflow: scroll;
 			}
 
-			.long-detail {
+			.detail {
 				width: 200px;
-				display: inline-block;
-			}
-
-			.short-detail {
-				width: 100px;
 				display: inline-block;
 			}
 
@@ -37,9 +32,20 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				padding: 20px;
 			}
 
-			#createButton {
-				background-color: var(--secondary-color);
-				color: #fff;
+			.cancel {
+				background-color: #fff;
+				color: var(--primary-text);
+			}
+
+
+			@media (max-width: 599px) {
+				paper-dialog {
+					width: 100vw;
+				}
+
+				.detail {
+					width: 80%;
+				}
 			}
 		</style>
 
@@ -51,7 +57,7 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 			<h2>Create a New Event</h2>
 			<paper-input
 				autofocus
-				class="short-detail"
+				class="detail"
 				label="Title"
 				required
 				auto-validate
@@ -60,16 +66,25 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				invalid="{{validTitle}}">
 			</paper-input>
 			<paper-input
-				class="short-detail"
+				class="detail"
 				label="Type of Event"
 				required
 				auto-validate
 				error-message="Required"
 				value="{{eventType}}"
-				invalid="{{validType}}">
+				invalid="{{validType}}"
+				list="newtypes">
 			</paper-input>
+			<datalist id="newtypes">
+				<option value="Party"></option>
+				<option value="Rave"></option>
+				<option value="Picnic"></option>
+				<option value="Hackathon"></option>
+				<option value="Competition"></option>
+				<option value="Study Session"></option>
+			</datalist>
 			<paper-input
-				class="short-detail"
+				class="detail"
 				label="Host"
 				required
 				auto-validate
@@ -78,16 +93,17 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				invalid="{{validHost}}">
 			</paper-input>
 			<paper-input
-				class="short-detail"
+				class="detail"
 				label="Location"
 				required
 				auto-validate
+				autocomplete="street-address"
 				error-message="Required"
 				value="{{eventLocation}}"
 				invalid="{{validLocation}}">
 			</paper-input>
 			<paper-input
-				class="long-detail"
+				class="detail"
 				label="Start"
 				required
 				auto-validate
@@ -97,17 +113,18 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				invalid="{{validStart}}">
 			</paper-input>
 			<paper-input
-				class="long-detail"
+				class="detail"
 				label="End"
 				required
 				auto-validate
-				error-message="Required"
+				error-message="Required. No earlier than start date."
 				value="{{eventEnd}}"
 				type="datetime-local"
-				invalid="{{validEnd}}">
+				invalid="{{validEnd}}"
+				min="[[eventStart]]">
 			</paper-input>
 			<paper-textarea
-				class="long-detail"
+				class="detail"
 				label="Guest List"
 				required
 				auto-validate
@@ -115,18 +132,18 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				value="{{eventGuests}}">
 			</paper-textarea>
 			<paper-input
-				class="long-detail"
+				class="detail"
 				label="Image URL (optional)"
 				value="{{eventImage}}">
 			</paper-input>
 			<paper-textarea
-				class="long-detail"
+				class="detail"
 				label="Extra Info (optional)"
 				value="{{eventInfo}}">
 			</paper-textarea>
 			<div class="padded">
-				<paper-button raised on-tap="close">Cancel</paper-button>
-				<paper-button id="createButton" raised disabled="[[!formValid]]" on-tap="submit">Create</paper-button>
+				<paper-button class="cancel" raised on-tap="close">Cancel</paper-button>
+				<paper-button raised disabled$="[[!formValid]]" on-tap="submit">Create</paper-button>
 			</div>
 		</paper-dialog>
 	</template>

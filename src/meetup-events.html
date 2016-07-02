@@ -97,10 +97,6 @@ This view displays all the events in this app's database, organized from oldest 
 				type: String,
 				value: 'Nick'
 			},
-			path: {
-				type: String,
-				notify: true
-			},
 			data: {
 				type: Object
 			}
@@ -130,6 +126,7 @@ This view displays all the events in this app's database, organized from oldest 
 		// Opens the new-event dialog box
 		openNew: function() {
 			this.$.newEvent.open();
+			this.$.events.path = null;
 		},
 
 		// Opens the event editor with the event's info

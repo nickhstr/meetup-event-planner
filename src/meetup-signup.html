@@ -17,7 +17,6 @@ This view handles user creation, and is only imported into meetup-app when reque
 	<template>
 		<style is="custom-style">
 			:host {
-				background-color: var(--light-gray);
 			}
 
 			form {
@@ -49,8 +48,6 @@ This view handles user creation, and is only imported into meetup-app when reque
 
 			paper-button {
 				margin: 0 80px;
-				background-color: var(--secondary-color);
-				color: #fff;
 			}
 
 
@@ -78,7 +75,8 @@ This view handles user creation, and is only imported into meetup-app when reque
 						auto-validate
 						error-message="Requires text only!"
 						pattern="[a-zA-Z]+"
-						invalid="{{signupFirst}}">
+						invalid="{{signupFirst}}"
+						tabindex="0">
 					</paper-input>
 					<paper-input
 						autocomplete="family-name"
@@ -106,13 +104,12 @@ This view handles user creation, and is only imported into meetup-app when reque
 						type="password"
 						value="{{password}}"
 						required
-						auto-validate
-						error-message="Must contain letters and numbers, and be at least 8 characters long"
-						pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+						error-message="{{errorPass}}"
 						invalid="{{signupPass}}">
 					</paper-input>
 					<paper-input
 						label="Job Title (optional)"
+						autocomplete="organization-title"
 						value="{{jobTitle}}">
 					</paper-input>
 					<paper-input
@@ -153,7 +150,8 @@ This view handles user creation, and is only imported into meetup-app when reque
 			password: {
 				type: String,
 				value: '',
-				notify: true
+				notify: true,
+				observer: '_passValidity'
 			},
 			jobTitle: {
 				type: String,
@@ -168,8 +166,7 @@ This view handles user creation, and is only imported into meetup-app when reque
 			page: {
 				type: String,
 				value: '',
-				notify: true,
-				reflectToAttribute: true
+				notify: true
 			},
 			signupFirst: {
 				type: Boolean,
@@ -188,7 +185,6 @@ This view handles user creation, and is only imported into meetup-app when reque
 			},
 			signupPass: {
 				type: Boolean,
-				value: false,
 				notify: true
 			},
 			formValid: {
@@ -199,12 +195,57 @@ This view handles user creation, and is only imported into meetup-app when reque
 
 		ready: function() {
 			this.formValid = false;
+			this.signupPass = false;
 		},
 
 		observers: [
 			'_compareRoute(page)',
 			'_validityCheck(signupFirst, signupLast, signupEmail, signupPass, password)'
 		],
+
+		_passValidity: function(val) {
+			var regex1 = new RegExp('[a-zA-Z]');
+			var regex2 = new RegExp('[0-9]');
+			var passLength = this.password.length;
+
+			if (!(regex1.test(val)) &&
+				!(regex2.test(val)) &&
+				passLength < 8) {
+				this.errorPass = 'At least 8 characters, with numbers and letters';
+				this.signupPass = true;
+			}
+			else if (!(regex1.test(val)) &&
+				!(regex2.test(val))) {
+				this.errorPass = 'Needs numbers and letters';
+				this.signupPass = true;
+			}
+			else if (!(regex1.test(val)) &&
+				passLength < 8) {
+				this.errorPass = 'At least 8 characters, with letters';
+				this.signupPass = true;
+			}
+			else if (!(regex2.test(val)) &&
+				passLength < 8) {
+				this.errorPass = 'At least 8 characters, with numbers';
+				this.signupPass = true;
+			}
+			else if (!(regex1.test(val))) {
+				this.errorPass = 'Needs letters';
+				this.signupPass = true;
+			}
+			else if (!(regex2.test(val))) {
+				this.errorPass = 'Needs numbers';
+				this.signupPass = true;
+			}
+			else if (passLength < 8) {
+				this.errorPass = 'At least 8 characters';
+				this.signupPass = true;
+			}
+			else {
+				this.errorPass = '';
+				this.signupPass = false;
+			}
+		},
 
 		// Signup event fired for meetup-app to handle, including new user information
 		signUp: function(e, detail) {
@@ -221,8 +262,9 @@ This view handles user creation, and is only imported into meetup-app when reque
 		// This observer watches the current route.
 		// If the current route is "signup", have the first input focused.
 		_compareRoute: function(page) {
+			var self = this;
 			if (page === 'signup') {
-				this.$.signupfocus.focus();
+				self.$.signupfocus.focus();
 			}
 		},
 

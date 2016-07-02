@@ -43,16 +43,27 @@ This is foundation of the app. Other views are lazily loaded, save for the defau
         --dark-gray: #263238;
         --primary-text: rgba(0, 0, 0, 0.8);
         --secondary-text: rgba(0, 0, 0, 0.6);
+        --disabled-color: #8c8c8c;
         --line-spacing: 150%;
         --paper-input-container-focus-color: var(--secondary-color);
         --paper-input-container-invalid-color: var(--primary-color);
         visibility: hidden;
+
+        --paper-button: {
+          background-color: var(--secondary-color);
+          color: #fff;
+        };
+
+        --paper-button-disabled: {
+          background-color: var(--disabled-color);
+          color: #ddd;
+        };
       }
 
       neon-animated-pages {
         height: 100%;
         min-height: 100vh;
-        background-color: none;
+        background-color: var(--light-gray);
       }
 
       .header-theme {
