@@ -35,6 +35,14 @@ This view displays all the events in this app's database, organized from oldest 
 				right: 40px;
 				z-index: 5;
 			}
+
+
+			@media (max-width: 599px) {
+				paper-fab {
+					bottom: 20px;
+					right: 20px;
+				}
+			}
 		</style>
 
 		<!-- Acess to events document for editing, with its path determined by functions below -->
@@ -76,6 +84,8 @@ This view displays all the events in this app's database, organized from oldest 
 					event-image="[[event.image]]"
 					event-start="[[event.start]]"
 					event-end="[[event.end]]"
+					formatted-start="[[event.formattedStart]]"
+					formatted-end="[[event.formattedEnd]]"
 					event-guests="[[event.guests]]"
 					event-location="[[event.location]]"
 					event-info="[[event.info]]"
@@ -112,8 +122,10 @@ This view displays all the events in this app's database, organized from oldest 
 				image: info.image,
 				type: info.type,
 				host: info.host,
-				start: moment(info.start).format('MMM Do, YYYY h:mma'),
-				end: moment(info.end).format('MMM Do, YYYY h:mma'),
+				start: info.start,
+				end: info.end,
+				formattedStart: moment(info.start).format('MMM Do, YYYY h:mma'),
+				formattedEnd: moment(info.end).format('MMM Do, YYYY h:mma'),
 				guests: info.guests,
 				location: info.location,
 				info: info.info
@@ -147,6 +159,8 @@ This view displays all the events in this app's database, organized from oldest 
 				host: info.host,
 				start: info.start,
 				end: info.end,
+				formattedStart: moment(info.start).format('MMM Do, YYYY h:mma'),
+				formattedEnd: moment(info.end).format('MMM Do, YYYY h:mma'),
 				guests: info.guests,
 				location: info.location,
 				info: info.info || ''

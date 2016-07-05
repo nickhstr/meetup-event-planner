@@ -61,7 +61,7 @@ Displays an event and its information. Details are organized as a material desig
 					Where: <span class="text">[[eventLocation]]</span>
 				</div>
 				<div class="detail">
-					When: <span class="text">[[eventStart]]</span> to <span class="text">[[eventEnd]]</span>
+					When: <span class="text">[[formattedStart]]</span> to <span class="text">[[formattedEnd]]</span>
 				</div>
 				<div class="detail">
 					Guests: <span class="text">[[eventGuests]]</span>
@@ -113,6 +113,14 @@ Displays an event and its information. Details are organized as a material desig
 			eventEnd: {
 				type: String,
 				value: '',
+				notify: true
+			},
+			formattedStart: {
+				type: String,
+				notify: true
+			},
+			formattedEnd: {
+				type: String,
 				notify: true
 			},
 			eventGuests: {

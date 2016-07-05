@@ -118,6 +118,7 @@ For reference, this component's structure and functionality is almost the exact 
 				required
 				auto-validate
 				error-message="Required"
+				type="datetime-local"
 				value="{{eventStart}}"
 				invalid="{{validStart}}">
 			</paper-input>
@@ -126,10 +127,11 @@ For reference, this component's structure and functionality is almost the exact 
 				label="End"
 				required
 				auto-validate
-				error-message="Required"
+				error-message="Required. No earlier than start date."
+				type="datetime-local"
 				value="{{eventEnd}}"
 				invalid="{{validEnd}}"
-				min="[[eventStart]]">
+				min="[[minEnd]]">
 			</paper-input>
 			<paper-textarea
 				class="detail"
@@ -188,11 +190,16 @@ For reference, this component's structure and functionality is almost the exact 
 			eventStart: {
 				type: String,
 				value: '',
-				notify: true
+				notify: true,
+				observer: 'setMinEnd'
 			},
 			eventEnd: {
 				type: String,
 				value: '',
+				notify: true
+			},
+			minEnd: {
+				type: String,
 				notify: true
 			},
 			eventGuests: {
@@ -253,6 +260,12 @@ For reference, this component's structure and functionality is almost the exact 
 		observers: [
 			'_validityCheck(validTitle, validType, validHost, validLocation, validStart, validEnd, eventGuests)'
 		],
+
+		setMinEnd: function(val) {
+			if (val) {
+				this.minEnd = moment(val).add(1, 'h').format('YYYY-MM-DDTHH:mm');
+			}
+		},
 
 		_validityCheck: function(validTitle, validType, validHost, validLocation, validStart, validEnd, eventGuests) {
 			if (validTitle === false &&

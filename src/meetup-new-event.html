@@ -128,7 +128,7 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 				value="{{eventEnd}}"
 				type="datetime-local"
 				invalid="{{validEnd}}"
-				min="[[eventStart]]">
+				min="[[minEnd]]">
 			</paper-input>
 			<paper-textarea
 				class="detail"
@@ -185,12 +185,17 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 			eventStart: {
 				type: String,
 				value: '',
-				notify: true
+				notify: true,
+				observer: 'setMinEnd'
 			},
 			eventEnd: {
 				type: String,
 				value: '',
 				notify: true
+			},
+			minEnd: {
+				type: String,
+				notify: true,
 			},
 			eventGuests: {
 				type: String,
@@ -250,6 +255,12 @@ A dialog box made visible when the user fires taps the "openNew" button. Form su
 		observers: [
 			'_validityCheck(validTitle, validType, validHost, validStart, validEnd, validLocation, eventGuests)'
 		],
+
+		setMinEnd: function(val) {
+			if (val) {
+				this.minEnd = moment(val).add(1, 'h').format('YYYY-MM-DDTHH:mm');
+			}
+		},
 
 		// Function called by the "openNew" event handler in the meetup-events component
 		open: function() {
