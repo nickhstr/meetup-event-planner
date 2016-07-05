@@ -80,7 +80,6 @@ Much like the sign-up view, this submits info for user authentication.
 				<meetup-section>
 					<paper-input
 						id="signinfocus"
-						autofocus
 						autocomplete="email"
 						auto-validate
 						error-message="Don't forget your email!"
@@ -139,8 +138,7 @@ Much like the sign-up view, this submits info for user authentication.
 			page: {
 				type: String,
 				value: '',
-				notify: true,
-				reflectToAttribute: true
+				notify: true
 			},
 			canSubmit: {
 				type: Boolean,
@@ -169,8 +167,11 @@ Much like the sign-up view, this submits info for user authentication.
 
 		// Observer which focuses the first input if the current view is "signin"
 		_compareRoute: function(page) {
+			var self = this;
 			if (page === 'signin') {
-				this.$.signinfocus.focus();
+				setTimeout(function() {
+					self.$.signinfocus.focus();
+				}, 100);
 			}
 		},
 

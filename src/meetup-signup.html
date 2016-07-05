@@ -67,7 +67,6 @@ This view handles user creation, and is only imported into meetup-app when reque
 				<meetup-section>
 					<paper-input
 						id="signupfocus"
-						autofocus
 						autocomplete="given-name"
 						label="First Name"
 						value="{{firstname}}"
@@ -264,7 +263,9 @@ This view handles user creation, and is only imported into meetup-app when reque
 		_compareRoute: function(page) {
 			var self = this;
 			if (page === 'signup') {
-				self.$.signupfocus.focus();
+				setTimeout(function() {
+					self.$.signupfocus.focus();
+				}, 100);
 			}
 		},
 
