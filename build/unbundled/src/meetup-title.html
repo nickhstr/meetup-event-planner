@@ -1,0 +1,12 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+</head><body><dom-module id="meetup-title">
+	<template>
+		<style is="custom-style">:host{padding:40px 20px;@apply (--layout);@apply (--layout-center);background-color:var(--dark-gray);color:#fff;}h1.underline{font-family:'Slabo 13px', serif;font-size:1.75em;padding:0 0 5px 0;border-bottom:1px solid var(--primary-color);width:8em;margin:0 0 0 60px;}@media (max-width: 739px){h1.underline{margin:0 0 0 20px;}}</style>
+
+		<h1 class="underline">[[title]]</h1>
+
+	</template>
+	<script>Polymer({is:"meetup-title",properties:{title:{type:String}}});</script>
+</dom-module></body></html>

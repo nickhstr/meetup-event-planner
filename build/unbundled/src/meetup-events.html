@@ -1,0 +1,46 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="meetup-title.html">
+<link rel="import" href="meetup-event.html">
+<link rel="import" href="meetup-new-event.html">
+<link rel="import" href="meetup-event-editor.html">
+
+</head><body><dom-module id="meetup-events">
+	<template>
+
+		<style is="custom-style">section{@apply (--layout);@apply (--layout-wrap);@apply (--layout-center-justified);background-color:var(--light-gray);}paper-fab{--paper-fab-background:var(--secondary-color);--paper-fab-keyboard-focus-background:#104d82;position:fixed;bottom:40px;right:40px;z-index:5;}@media (max-width: 599px){paper-fab{bottom:20px;right:20px;}}</style>
+
+		
+		<firebase-document id="events" app-name="meetup" data="{{data}}">
+		</firebase-document>
+
+		
+		<firebase-query id="eventsQuery" app-name="meetup" path="/events" data="{{queryData}}">
+		</firebase-query>
+
+		<meetup-title title="Events"></meetup-title>
+
+		
+		<paper-fab icon="add" label="New Event" on-tap="openNew"></paper-fab>
+
+		
+		<meetup-new-event id="newEvent" on-submit="submitInfo">
+		</meetup-new-event>
+
+		
+		<meetup-event-editor id="editor" on-delete="delete" on-save="save"></meetup-event-editor>
+
+		
+		<section>
+			<template id="event" is="dom-repeat" items="[[queryData]]" as="event" initial-count="1">
+				<meetup-event event-title="[[event.title]]" event-type="[[event.type]]" event-host="[[event.host]]" event-image="[[event.image]]" event-start="[[event.start]]" event-end="[[event.end]]" formatted-start="[[event.formattedStart]]" formatted-end="[[event.formattedEnd]]" event-guests="[[event.guests]]" event-location="[[event.location]]" event-info="[[event.info]]" event-id="[[event.$key]]" on-open="openEditor">
+				</meetup-event>
+			</template>
+		</section>
+
+	</template>
+	<script>Polymer({is:"meetup-events",properties:{myName:{type:String,value:"Nick"},data:{type:Object}},submitInfo:function(t,e){var n=this,a=t.detail;n.data={title:a.title,image:a.image,type:a.type,host:a.host,start:a.start,end:a.end,formattedStart:moment(a.start).format("MMM Do, YYYY h:mma"),formattedEnd:moment(a.end).format("MMM Do, YYYY h:mma"),guests:a.guests,location:a.location,info:a.info},n.$.events.save("/events"),n.$.events.path=null},openNew:function(){this.$.newEvent.open(),this.$.events.path=null},openEditor:function(t,e){this.$.events.path="/events/"+t.detail.eventId,this.$.editor.open(t.detail)},save:function(t,e){var n=this,a=t.detail;n.data={title:a.title,image:a.image||"",type:a.type,host:a.host,start:a.start,end:a.end,formattedStart:moment(a.start).format("MMM Do, YYYY h:mma"),formattedEnd:moment(a.end).format("MMM Do, YYYY h:mma"),guests:a.guests,location:a.location,info:a.info||""},n.$.events.setStoredValue(n.$.events.path,n.data).then(function(){n.$.events.path=null})},"delete":function(t,e){this.$.events.destroy(),this.$.events.path=null}});</script>
+</dom-module></body></html>
